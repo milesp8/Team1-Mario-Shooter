@@ -27,6 +27,109 @@ var UP_KEY=38; //double press jump key
 var RIGHT_KEY=39; //change direction key 
 var DOWN_KEY=40; //change direction key
 
+//JQuery code for movement
+$(document).ready(function(){
+    //var gravity = 0.8  //can be used for alternative jumping function
+    var isJumping = false
+    var movingTimeout = -1
+    var frames = 60
+
+
+    //Character jump motion
+    function jump() {
+        if (isJumping === false) {
+
+            isJumping = true;
+
+            //Upward and downward motion animation
+            $('div.character').animate({top: '-=25%'}, { 
+                duration: 250
+            }).animate({top: '+=25%'}, { 
+                duration: 250
+            });
+
+            isJumping = false;
+        }
+    }
+
+    //Right movement
+    function moveRight() {
+ 
+        $('div.character').css('left', (parseInt($('div.character').css('left')) + 20) + 'px');
+
+        movingTimeout = setTimeout(moveRight, 1000 / frames);
+
+    }
+
+    
+    //Left movement
+    function moveLeft() {
+
+        $('div.character').css('left', (parseInt($('div.character').css('left')) - 20) + 'px');
+
+        movingTimeout = setTimeout(moveLeft, 1000 / frames);
+
+    }
+
+    //When key is pressed
+    $(document).keydown(function(e){
+        switch(e.which){
+            case 37:  //left key
+
+                if (movingTimeout === -1) {
+                    moveLeft();
+                }
+                break;
+
+            case 38:  //up key
+                jump();
+                break;
+
+            case 39:  //right key
+
+                if (movingTimeout === -1) {
+                    moveRight();
+                }
+                break;
+
+            case 40:  //down key
+                break;
+
+            default: return;
+        }
+    });
+
+    //When key is released
+    $(document).keyup(function(e){
+        switch(e.which){
+            case 37:  //left key
+                clearTimeout(movingTimeout);
+                movingTimeout = -1;
+
+                break;
+
+            case 38:  //up key
+
+                $('div.character').stop(false, true);
+
+                break;
+
+            case 39:  //right key
+                clearTimeout(movingTimeout);
+                movingTimeout = -1;
+
+                break;
+
+            case 40:  //down key
+                break;
+
+            default: return;
+        }
+    });
+});
+
+
+
 /*
 function toggleKey(keyCode,isPressed){
     console.log(keyCode);
