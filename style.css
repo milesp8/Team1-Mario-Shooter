@@ -14,7 +14,7 @@
 
 
 .character{
-    /*background-image: url(mario.png); Not working for some reason*/ 
+    background-image: url(assets/Player/mariosmall.png); 
     background-color: red;
     height:30px;
     width: 30px;
