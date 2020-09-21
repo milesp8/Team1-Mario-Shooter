@@ -1,1 +1,21 @@
+#Background{
 
+    /* 
+    We should prob use something like this for the relative look google doc shared link.
+    */
+    background-color: lightskyblue;
+    width: 100vw;
+    position: relative; /*we can use [position:absolute] to specify a location"*/
+    margin-left: -50vw;
+    height: 500px;
+    margin-top: 0px;
+    left: 50%; 
+}
+
+#Mario{
+    /*background-image: url(mario.png); Not working for some reason*/ 
+    background-color: red;
+    height:30px;
+    width: 30px;
+    position: absolute;
+}
