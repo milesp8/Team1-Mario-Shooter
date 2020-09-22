@@ -16,6 +16,7 @@ function setPosition(sprite){
     $('#'+sprite.element).css(({top: sprite.y, left: sprite.x}));
 }
 
+var enemyArr = [];
 
 function createEnemy(health, x, y, width, height){
     var enemy = new Object();
@@ -28,13 +29,14 @@ function createEnemy(health, x, y, width, height){
     $("ul.enemyList").append('<li><div class=enemy id=' + enemy.element + '></div></li>')
     $('#' + enemy.element).css(({top: y, left: x, width: width +'px', height: height + 'px'}));
     setPosition(enemy);
-    if(enemyArr.length >= 10){
+    enemyArr.push(enemy)
+    if(enemyArr.length > 10){
         $("#" + enemyArr.shift().element).remove();
     }
     return enemy;
 }
 
-enemyArr = [];
+
 
 
 
@@ -53,8 +55,8 @@ $(document).ready(function(){
     var frames = 60;
 
     //creates test enemies
-    enemyArr.push(createEnemy(3,400,600, 20, 100));
-    enemyArr.push(createEnemy(2,800,650, 60, 50));
+    createEnemy(3,400,600, 20, 100);
+    createEnemy(2,800,650, 60, 50);
 
     //Character jump motion
     function jump() {
