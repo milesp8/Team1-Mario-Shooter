@@ -13,10 +13,25 @@ Mario.y=600;
 
 /* allows us to set a position */
 function setPosition(sprite){
-    var e=document.getElementById(sprite.element);
-    e.style.left =sprite.x+'px';
-    e.style.top=sprite.y+'px';
+    $('#'+sprite.element).css(({top: sprite.y, left: sprite.x}));
 }
+
+
+function createEnemy(health, x, y){
+    var enemy = new Object();
+    enemy.element = "enemy"+ Math.floor(Math.random() * 100000);
+    enemy.health = health;
+    enemy.x = x;
+    enemy.y = y;
+    $("ul.enemyList").append('<li><div class=enemy id=' + enemy.element + '></div></li>').css(({top: y, left: x}));
+    setPosition(enemy);
+    if(enemyArr.length >= 10){
+        $("#" + enemyArr.shift().element).remove();
+    }
+    return enemy;
+}
+
+enemyArr = [];
 
 
 
@@ -30,10 +45,13 @@ var DOWN_KEY=40; //change direction key
 //JQuery code for movement
 $(document).ready(function(){
     //var gravity = 0.8  //can be used for alternative jumping function
-    var isJumping = false
-    var movingTimeout = -1
-    var frames = 60
+    var isJumping = false;
+    var movingTimeout = -1;
+    var frames = 60;
 
+    //creates test enemies
+    enemyArr.push(createEnemy(3,400,600));
+    enemyArr.push(createEnemy(2,700,650));
 
     //Character jump motion
     function jump() {
