@@ -46,6 +46,7 @@ var SPACE_KEY=32; //shooting key.
 var UP_KEY=38; //double press jump key
 var RIGHT_KEY=39; //change direction key 
 var DOWN_KEY=40; //change direction key
+var LEFT_KEY = 37; //Change dir key
 
 //JQuery code for movement
 $(document).ready(function(){
@@ -97,25 +98,28 @@ $(document).ready(function(){
     //When key is pressed
     $(document).keydown(function(e){
         switch(e.which){
-            case 37:  //left key
+            case LEFT_KEY:  //left key
 
                 if (movingTimeout === -1) {
                     moveLeft();
                 }
                 break;
 
-            case 38:  //up key
+            case UP_KEY:  //up key
                 jump();
                 break;
 
-            case 39:  //right key
+            case RIGHT_KEY:  //right key
 
                 if (movingTimeout === -1) {
                     moveRight();
                 }
                 break;
 
-            case 40:  //down key
+            case DOWN_KEY:  //down key
+                break;
+
+            case SPACE_KEY:
                 break;
 
             default: return;
