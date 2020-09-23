@@ -17,6 +17,7 @@ function setPosition(sprite){
 }
 
 var enemyArr = [];
+var projArr = [];
 
 function createEnemy(health, x, y, width, height){
     var enemy = new Object();
@@ -34,6 +35,20 @@ function createEnemy(health, x, y, width, height){
         $("#" + enemyArr.shift().element).remove();
     }
     return enemy;
+}
+function createProjectile(x,y){
+    var proj = new Object();
+    proj.element = "proj"+ Math.floor(Math.random() * 100000);
+    proj.x = x;
+    proj.y = y;
+    $("ul.projList").append('<li><div class=proj id=' + proj.element + '></div></li>')
+    ('#' + proj.element).css(({top: y, left: x, width: width +'px', height: height + 'px'}));
+    setPosition(proj);
+    projArr.push(proj);
+    if(projArr.length > 10){
+        $("#" + projArr.shift().element).remove()
+    }
+    return proj;
 }
 
 
@@ -95,6 +110,17 @@ $(document).ready(function(){
 
     }
 
+    //Shooting Functionality
+    function shoot(){
+        let laserID
+        let currLaserID = 0;
+        createProjectile(10,10);
+        //Write function to move lasers
+        function moveLasers(){
+
+        }
+    }
+
     //When key is pressed
     $(document).keydown(function(e){
         switch(e.which){
@@ -120,6 +146,7 @@ $(document).ready(function(){
                 break;
 
             case SPACE_KEY:
+                shoot();
                 break;
 
             default: return;
