@@ -83,11 +83,14 @@ $(document).ready(function(){
             //Upward and downward motion animation
             $('div.character').animate({top: '-=25%'}, { 
                 duration: 250
-            }).animate({top: '+=25%'}, { 
+            }
+            ).animate({top: '+=25%'}, { 
                 duration: 250
-            });
+            }).promise().done(function(){
+                isJumping = false;
+            });;
 
-            isJumping = false;
+            
         }
     }
 
