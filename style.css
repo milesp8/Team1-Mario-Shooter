@@ -29,4 +29,12 @@
     position: absolute;
     bottom: 0px;
 }
+
+.projectile{
+    background-color: purple;
+    height: 10px;
+    width: 30px;
+    position: absolute;
+    bottom: 0px;
+}
 ul, li { list-style-type: none; }
