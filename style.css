@@ -35,6 +35,6 @@
     height: 10px;
     width: 30px;
     position: absolute;
-    bottom: 0px;
+    bottom: 15px;
 }
 ul, li { list-style-type: none; }
