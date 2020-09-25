@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         proj.x = x;
         proj.y = y;
         $("ul.projList").append('<li><div class=proj id=' + proj.element + '></div></li>')
-        $('#' + proj.element).css(({ top: y, left: x, width: width + 'px', height: height + 'px' }));
+        $('#' + proj.element).css(({ top: y, left: x}));
         projArr.push(proj);
         if (projArr.length > 10) {
             $("#" + projArr.shift().element).remove()
@@ -98,7 +98,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function moveRight() {
 
         $('div.ground').css('left', (parseInt($('div.ground').css('left')) - 20) + 'px');
-
+        enemyArr.forEach(e => {
+            $('#' + e.element).css('left', (parseInt($('#' + e.element).css('left')) - 20) + 'px');
+        });
+        projArr.forEach(p => {
+            $('#' + p.element).css('left', (parseInt($('#' + p.element).css('left')) - 20) + 'px');
+        });
         movingTimeout = setTimeout(moveRight, 1000 / frames);
 
     }
@@ -108,7 +113,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function moveLeft() {
 
         $('div.ground').css('left', (parseInt($('div.ground').css('left')) + 20) + 'px');
-
+        enemyArr.forEach(e => {
+            $('#' + e.element).css('left', (parseInt($('#' + e.element).css('left')) + 20) + 'px');
+        });
+        projArr.forEach(p => {
+            $('#' + p.element).css('left', (parseInt($('#' + p.element).css('left')) + 20) + 'px');
+        });
         movingTimeout = setTimeout(moveLeft, 1000 / frames);
 
     }
