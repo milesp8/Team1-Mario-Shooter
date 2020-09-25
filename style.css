@@ -1,40 +1,53 @@
-.background{
+body {
+    margin: 0;
+    padding: 0;
+}
 
-    /* 
-    We should prob use something like this for the relative look google doc shared link.
-    */
+.game-container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+.world {
     background-color: lightskyblue;
-    height: 750px;
-    width: 100vw;
-    position: relative; /*we can use [position:absolute] to specify a location"*/
-    margin-left: -50vw;
-    margin-top: 0px;
-    left: 50%; 
+    width: 100%;
+    height: 100%;
+    position: absolute;
 }
 
+.ground {
+    background-color: brown;
+    width: 500px;
+    height: 150px;
+    top: 0;
+    position: absolute;
+    right: 0;
+}
 
-.character{
-    background-image: url(assets/Player/mariosmall.png); 
+.character {
+    background-image: url(assets/Player/mariosmall.png);
     background-color: red;
-    height:30px;
+    height: 30px;
     width: 30px;
     position: absolute;
     bottom: 0px;
 }
 
-.enemy{
+.enemy {
     background-color: green;
-    height:30px;
+    height: 30px;
     width: 30px;
     position: absolute;
     bottom: 0px;
 }
 
-.proj{
+.proj {
     background-color: purple;
     height: 10px;
     width: 30px;
     position: absolute;
     bottom: 15px;
 }
+
 ul, li { list-style-type: none; }
