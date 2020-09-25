@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         proj.x = x;
         proj.y = y;
         $("ul.projList").append('<li><div class=proj id=' + proj.element + '></div></li>')
-            ('#' + proj.element).css(({ top: y, left: x, width: width + 'px', height: height + 'px' }));
+        $('#' + proj.element).css(({ top: y, left: x, width: width + 'px', height: height + 'px' }));
         projArr.push(proj);
         if (projArr.length > 10) {
             $("#" + projArr.shift().element).remove()
