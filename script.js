@@ -3,19 +3,21 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("true")
     var enemyArr = [];
     var projArr = [];
+    var groundArr = [];
+    var GROUND_WIDTH = 100;
 
-    groundTop = 0;
+   // groundTop = 0;
 
-    ground = document.querySelector('.ground')
+   // ground = document.querySelector('.ground')
 
-    function startGame() {
-        groundTop = 100;
+   // function startGame() {
+     //   groundTop = 100;
         /*ground.style.top = groundTop + 'px';*/
-        ground.style.bottom=0+'px';
-    }
+       // ground.style.bottom=0+'px';
+    //}
 
-    startGame()
-    console.log(ground.style.bottom);
+    //startGame()
+    //console.log(ground.style.bottom);
 
 
 
@@ -52,7 +54,28 @@ document.addEventListener('DOMContentLoaded', () => {
         return proj;
     }
 
+    function createGround(x, y, width, height) {
+        var ground = new Object();
+        ground.element = "ground" + Math.floor(Math.random() * 100000);
+        ground.x = x;
+        ground.y = y;
+        ground.height = height;
+        ground.width = width;
+        $("ul.groundList").append('<li><div class=ground id=' + ground.element + '></div></li>')
+        $('#' + ground.element).css(({ bottom: y, left: x, width: width + 'px', height: height + 'px' }));
+        groundArr.push(ground)
+        return ground;
+    }
+    
 
+    function updateGround() {
+        if (parseInt($('#' + groundArr[0].element).css('left')) < -100) {
+            groundArr.shift();
+        }
+        if (groundArr.length < 40) {
+            createGround(groundArr[groundArr.length - 1].x + 100, 0, 100, 150);
+        }
+    }
 
 
 
@@ -75,6 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
     createEnemy(3, 400, 600, 20, 100);
     createEnemy(2, 800, 650, 60, 50);
 
+    createGround(0, 0, 100, 150);
     //Character jump motion
     function jump() {
         if (isJumping === false) {
@@ -98,7 +122,10 @@ document.addEventListener('DOMContentLoaded', () => {
     //Right movement
     function moveRight() {
 
-        $('div.ground').css('left', (parseInt($('div.ground').css('left')) - 20) + 'px');
+        groundArr.forEach(e => {
+            $('#' + e.element).css('left', (parseInt($('#' + e.element).css('left')) - 20) + 'px');
+        });
+       // $('div.ground').css('left', (parseInt($('div.ground').css('left')) - 20) + 'px');
         enemyArr.forEach(e => {
             $('#' + e.element).css('left', (parseInt($('#' + e.element).css('left')) - 20) + 'px');
         });
@@ -107,13 +134,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         movingTimeout = setTimeout(moveRight, 1000 / frames);
 
+        updateGround();
     }
 
 
     //Left movement
     function moveLeft() {
 
-        $('div.ground').css('left', (parseInt($('div.ground').css('left')) + 20) + 'px');
+        groundArr.forEach(e => {
+            $('#' + e.element).css('left', (parseInt($('#' + e.element).css('left')) + 20) + 'px');
+        });
+        //$('div.ground').css('left', (parseInt($('div.ground').css('left')) + 20) + 'px');
         enemyArr.forEach(e => {
             $('#' + e.element).css('left', (parseInt($('#' + e.element).css('left')) + 20) + 'px');
         });
@@ -122,6 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         movingTimeout = setTimeout(moveLeft, 1000 / frames);
 
+        updateGround();
     }
 
     //Shooting Functionality
