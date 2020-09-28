@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
         enemyArr.forEach(e => {
             e.x -= 20;
         });
-        projArr.forEach(p => {
+        projArr.forEach(e => {
             e.x -=20;
         });
         movingTimeout = setTimeout(moveRight, 1000 / frames);
@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
         enemyArr.forEach(e => {
             e.x += 20;
         });
-        projArr.forEach(p => {
+        projArr.forEach(e => {
             e.x += 20
         });
         movingTimeout = setTimeout(moveLeft, 1000 / frames);
