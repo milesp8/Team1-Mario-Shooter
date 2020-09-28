@@ -69,7 +69,13 @@ document.addEventListener('DOMContentLoaded', () => {
     
 
     function updateGround() {
-        if (parseInt($('#' + groundArr[0].element).css('left')) < -100) {
+        groundArr.forEach(e => {
+            $('#' + e.element).css('left', e.x + 'px');
+        });
+    }
+
+    function updateGroundArr() {
+        if (groundArr[0].x < -100) {
             groundArr.shift();
         }
         if (groundArr.length < 40) {
@@ -77,6 +83,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function updateEnemies() {
+        enemyArr.forEach(e => {
+            $('#' + e.element).css('left', e.x + 'px');
+        });
+    }
+
+    function updateProj() {
+        projArr.forEach(e => {
+            $('#' + e.element).css('left', e.x + 'px');
+        });
+    }
 
 
     var controller = new Object();
@@ -123,18 +140,21 @@ document.addEventListener('DOMContentLoaded', () => {
     function moveRight() {
 
         groundArr.forEach(e => {
-            $('#' + e.element).css('left', (parseInt($('#' + e.element).css('left')) - 20) + 'px');
+            e.x -= 20;
         });
        // $('div.ground').css('left', (parseInt($('div.ground').css('left')) - 20) + 'px');
         enemyArr.forEach(e => {
-            $('#' + e.element).css('left', (parseInt($('#' + e.element).css('left')) - 20) + 'px');
+            e.x -= 20;
         });
         projArr.forEach(p => {
-            $('#' + p.element).css('left', (parseInt($('#' + p.element).css('left')) - 20) + 'px');
+            e.x -=20;
         });
         movingTimeout = setTimeout(moveRight, 1000 / frames);
 
+        updateEnemies();
+        updateProj();
         updateGround();
+        updateGroundArr();
     }
 
 
@@ -142,18 +162,21 @@ document.addEventListener('DOMContentLoaded', () => {
     function moveLeft() {
 
         groundArr.forEach(e => {
-            $('#' + e.element).css('left', (parseInt($('#' + e.element).css('left')) + 20) + 'px');
+            e.x += 20;
         });
         //$('div.ground').css('left', (parseInt($('div.ground').css('left')) + 20) + 'px');
         enemyArr.forEach(e => {
-            $('#' + e.element).css('left', (parseInt($('#' + e.element).css('left')) + 20) + 'px');
+            e.x += 20;
         });
         projArr.forEach(p => {
-            $('#' + p.element).css('left', (parseInt($('#' + p.element).css('left')) + 20) + 'px');
+            e.x += 20
         });
         movingTimeout = setTimeout(moveLeft, 1000 / frames);
 
+        updateEnemies();
+        updateProj();
         updateGround();
+        updateGroundArr();
     }
 
     //Shooting Functionality
