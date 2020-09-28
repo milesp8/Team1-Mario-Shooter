@@ -2,9 +2,11 @@ console.log("true")
 document.addEventListener('DOMContentLoaded', () => {
     console.log("true")
     var enemyArr = [];
-    var projArr = [];
+    var projArr = [[], []];
     var groundArr = [];
     var GROUND_WIDTH = 100;
+
+    var direction = 1  //direction of the character and projectile ( 1 = right, 2 = left)
 
    // groundTop = 0;
 
@@ -47,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
         proj.y = y;
         $("ul.projList").append('<li><div class=proj id=' + proj.element + '></div></li>')
         $('#' + proj.element).css(({ top: y, left: x}));
-        projArr.push(proj);
+        projArr.push(proj, direction);
         if (projArr.length > 10) {
             $("#" + projArr.shift().element).remove()
         }
@@ -140,6 +142,8 @@ document.addEventListener('DOMContentLoaded', () => {
     //Right movement
     function moveRight() {
 
+        direction = 1
+
         groundArr.forEach(e => {
             e.x -= 20;
         });
@@ -161,6 +165,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //Left movement
     function moveLeft() {
+
+        direction = 2
 
         groundArr.forEach(e => {
             e.x += 20;
