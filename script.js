@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (groundArr[0].x < -100) {
             groundArr.shift();
         }
-        if (groundArr.length < 40) {
+        while (groundArr.length < 40) {
             createGround(groundArr[groundArr.length - 1].x + 100, 0, 100, 150);
         }
     }
@@ -116,6 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
     createEnemy(2, 800, 650, 60, 50);
 
     createGround(0, 0, 100, 150);
+    updateGroundArr();
     //Character jump motion
     function jump() {
         if (isJumping === false) {
