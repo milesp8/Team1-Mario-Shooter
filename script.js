@@ -9,8 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
     ground = document.querySelector('.ground')
 
     function startGame() {
-        groundTop = 100
-        ground.style.top = groundTop + 'px';
+        groundTop = 100;
+        /*ground.style.top = groundTop + 'px';*/
+        ground.style.bottom=0+'px';
     }
 
     startGame()
@@ -127,7 +128,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function shoot() {
         let laserID
         let currLaserID = 0;
-        createProjectile(10, 10);
+        character = document.querySelector('.character')
+
+        /*xPos=character.style.left; ------> we should write function in terms of characters curr position pixel. 
+        createProjectile(character.style.left+450+"px",character.style.bottom+790+'px');*/
+
+        createProjectile(450,790);
         //Write function to move lasers
         function moveLasers() {
 
