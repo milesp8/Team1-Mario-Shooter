@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     var direction = 1  //direction of the character and projectile ( 1 = right, 2 = left)
 
+    const projSpeed = 40;
+
    // groundTop = 0;
 
    // ground = document.querySelector('.ground')
@@ -93,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateProj() {
         projArr.forEach(e => {
-            e.x += 40;
+            e.x += projSpeed;
             $('#' + e.element).css('left', e.x + 'px');
         });
     }
