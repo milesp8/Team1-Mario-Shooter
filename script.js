@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //startGame()
     //console.log(ground.style.bottom);
-
+    setInterval(updateProj, 30);//Lags the game quite a bit
 
 
     var enemyArr = [];
@@ -201,8 +201,6 @@ document.addEventListener('DOMContentLoaded', () => {
         function moveLasers() {
             var laserElem = document.getElementById(".character");
             updateProj;
-            
-            
         }
         updateProj()
     }
