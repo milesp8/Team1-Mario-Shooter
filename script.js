@@ -97,6 +97,9 @@ document.addEventListener('DOMContentLoaded', () => {
         projArr.forEach(e => {
             e.x += projSpeed;
             $('#' + e.element).css('left', e.x + 'px');
+            if (e.x > window.innerWidth){
+                $("#" + projArr.shift().element).remove();
+            }
         });
     }
 
