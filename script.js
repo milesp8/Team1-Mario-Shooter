@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
     //$(".game-container").css(({height: window.innerHeight + 'px'}));
     var direction = 1  //direction of the character and projectile ( 1 = right, 2 = left)
 
+    const projSpeed = 40;
+    const tickSpeed = 30;
+
    // groundTop = 0;
 
    // ground = document.querySelector('.ground')
@@ -21,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //startGame()
     //console.log(ground.style.bottom);
-    setInterval(updateProj, 30);//Lags the game quite a bit
+    setInterval(updateProj, tickSpeed);//Lags the game quite a bit
 
 
     var enemyArr = [];
@@ -94,8 +97,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateProj() {
         projArr.forEach(e => {
-            e.x += 40;
+            e.x += projSpeed;
             $('#' + e.element).css('left', e.x + 'px');
+            if (e.x > window.innerWidth){
+                $("#" + projArr.shift().element).remove();
+            }
         });
     }
 
