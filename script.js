@@ -93,6 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateProj() {
         projArr.forEach(e => {
+            e.x += 40;
             $('#' + e.element).css('left', e.x + 'px');
         });
     }
@@ -198,8 +199,12 @@ document.addEventListener('DOMContentLoaded', () => {
         createProjectile(450,790);
         //Write function to move lasers
         function moveLasers() {
-
+            var laserElem = document.getElementById(".character");
+            updateProj;
+            
+            
         }
+        updateProj()
     }
 
     //When key is pressed
