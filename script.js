@@ -1,11 +1,12 @@
-console.log("true")
+
 document.addEventListener('DOMContentLoaded', () => {
     console.log("true")
     var enemyArr = [];
     var projArr = [[], []];
     var groundArr = [];
     var GROUND_WIDTH = 100;
-
+    //$(".game-container").css(({width: window.innerWidth + 'px'}));
+    //$(".game-container").css(({height: window.innerHeight + 'px'}));
     var direction = 1  //direction of the character and projectile ( 1 = right, 2 = left)
 
    // groundTop = 0;
@@ -35,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         enemy.height = height;
         enemy.width = width;
         $("ul.enemyList").append('<li><div class=enemy id=' + enemy.element + '></div></li>')
-        $('#' + enemy.element).css(({ top: y, left: x, width: width + 'px', height: height + 'px' }));
+        $('#' + enemy.element).css(({ bottom: y + 'px', left: x + 'px', width: width + 'px', height: height + 'px' }));
         enemyArr.push(enemy)
         if (enemyArr.length > 10) {
             $("#" + enemyArr.shift().element).remove();
@@ -48,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
         proj.x = x;
         proj.y = y;
         $("ul.projList").append('<li><div class=proj id=' + proj.element + '></div></li>')
-        $('#' + proj.element).css(({ top: y, left: x}));
+        $('#' + proj.element).css(({ bottom: y + 'px', left: x + 'px'}));
         projArr.push(proj, direction);
         if (projArr.length > 10) {
             $("#" + projArr.shift().element).remove()
@@ -60,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
         var ground = new Object();
         ground.element = "ground" + Math.floor(Math.random() * 100000);
         ground.x = x;
-        ground.y = y;
+        ground.y = y; 
         ground.height = height;
         ground.width = width;
         $("ul.groundList").append('<li><div class=ground id=' + ground.element + '></div></li>')
@@ -115,11 +116,11 @@ document.addEventListener('DOMContentLoaded', () => {
     var frames = 60;
 
     //creates test enemies
-    createEnemy(3, 400, 600, 20, 100);
-    createEnemy(2, 800, 650, 60, 50);
+    createEnemy(3, 500, 150, 20, 100);
+    createEnemy(2, 800, 175, 60, 50);
 
-    createGround(0, 0, 100, 150);
-    updateGroundArr();
+   createGround(0, 0, 100, 150);
+   updateGroundArr();
     //Character jump motion
     function jump() {
         if (isJumping === false) {
@@ -196,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
         /*xPos=character.style.left; ------> we should write function in terms of characters curr position pixel. 
         createProjectile(character.style.left+450+"px",character.style.bottom+790+'px');*/
 
-        createProjectile(450,790);
+        createProjectile(450,160);
         //Write function to move lasers
         function moveLasers() {
             var laserElem = document.getElementById(".character");
