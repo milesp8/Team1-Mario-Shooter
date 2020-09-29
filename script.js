@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     var direction = 1  //direction of the character and projectile ( 1 = right, 2 = left)
 
     const projSpeed = 40;
+    const tickSpeed = 30;
 
    // groundTop = 0;
 
@@ -22,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //startGame()
     //console.log(ground.style.bottom);
-    setInterval(updateProj, 30);//Lags the game quite a bit
+    setInterval(updateProj, tickSpeed);//Lags the game quite a bit
 
 
     var enemyArr = [];
