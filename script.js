@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateProj() {
         projArr.forEach(e => {
-            e.x += projSpeed * e.dir + isMoving;
+            e.x += projSpeed * (e.dir + isMoving);
             $('#' + e.element).css('left', e.x + 'px');
             if (e.x > window.innerWidth || e.x <= 0) {
                 $("#" + projArr.shift().element).remove();
