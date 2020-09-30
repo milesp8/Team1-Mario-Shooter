@@ -105,3 +105,4 @@ dist
 
 # Vscode Folder
 .vscode
+launch.json
