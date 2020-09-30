@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
         projArr.forEach(e => {
             e.x += projSpeed * e.dir;
             $('#' + e.element).css('left', e.x + 'px');
-            if (e.x > window.innerWidth) {
+            if (e.x > window.innerWidth || e.x <= 0) {
                 $("#" + projArr.shift().element).remove();
             }
         });
@@ -256,7 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
         /*xPos=character.style.left; ------> we should write function in terms of characters curr position pixel. 
         createProjectile(character.style.left+450+"px",character.style.bottom+790+'px');*/
 
-        createProjectile(character.x + character.width, character.y + 20);
+        createProjectile(character.x + character.width / 3, character.y + 20);
         //Write function to move lasers
         function moveLasers() {
             var laserElem = document.getElementById(".character");
