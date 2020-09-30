@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateProj() {
         projArr.forEach(e => {
-            e.x += projSpeed * e.dir;
+            e.x += projSpeed * e.dir + 10;
             $('#' + e.element).css('left', e.x + 'px');
             if (e.x > window.innerWidth || e.x <= 0) {
                 $("#" + projArr.shift().element).remove();
@@ -210,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
         movingTimeout = setTimeout(moveRight, 1000 / frames);
         updateCharacter();
         updateEnemies();
-        updateProj();
+        //updateProj();
         updateGround();
         updateGroundArr();
     }
@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         updateCharacter();
         updateEnemies();
-        updateProj();
+        //updateProj();
         updateGround();
         updateGroundArr();
     }
@@ -259,8 +259,8 @@ document.addEventListener('DOMContentLoaded', () => {
         createProjectile(character.x + character.width / 3, character.y + 20);
         //Write function to move lasers
         function moveLasers() {
-            var laserElem = document.getElementById(".character");
-            updateProj;
+            //var laserElem = document.getElementById(".character");
+            //updateProj;
         }
     }
 
