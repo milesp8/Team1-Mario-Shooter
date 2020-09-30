@@ -185,6 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function moveRight() {
 
         direction = 1
+        $("#character").css(({transform: "scaleX(1)"}));
 
         if (character.AbsoluteX < character.AbsoluteLeft + 400) {
             character.x += playerSpeed;
@@ -217,6 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //Left movement
     function moveLeft() {
         direction = 2
+        $("#character").css(({transform: "scaleX(-1)"}));
         if (character.AbsoluteX > character.AbsoluteLeft) {
             console.log("left1");
             if (character.AbsoluteX <= character.AbsoluteLeft + 400) {
