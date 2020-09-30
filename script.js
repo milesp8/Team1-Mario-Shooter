@@ -91,8 +91,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (groundArr[0].x < -100) {
             groundArr.shift();
         }
-        while (groundArr.length < 19) {
-            createGround(groundArr[groundArr.length - 1].x + 100, 0, 117, 150);
+        while (groundArr.length < 40) {
+            createGround(groundArr[groundArr.length - 1].x + 100, 0, 100, 150);
         }
     }
 
