@@ -11,15 +11,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const projSpeed = 40;
     const tickSpeed = 30;
+    const playerSpeed = 20;
 
-   // groundTop = 0;
+    // groundTop = 0;
 
-   // ground = document.querySelector('.ground')
+    // ground = document.querySelector('.ground')
 
-   // function startGame() {
-     //   groundTop = 100;
-        /*ground.style.top = groundTop + 'px';*/
-       // ground.style.bottom=0+'px';
+    // function startGame() {
+    //   groundTop = 100;
+    /*ground.style.top = groundTop + 'px';*/
+    // ground.style.bottom=0+'px';
     //}
 
     //startGame()
@@ -29,11 +30,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     var enemyArr = [];
     var projArr = [];
+
+    var character = new Object();
+    character.element = "character";
+    character.x = 0;
+    character.y = 0
+    character.width = 30;
+    character.height = 50;
+    character.AbsoluteX = 0;
+    character.AbsoluteLeft = 0;
+    console.log(character.AbsoluteX);
+    console.log(character.AbsoluteLeft)
+    updateCharacter();
+
     function gravity(){
-        if (characterY > 150 && jumpCount == 0){
-            characterY -=15;
+        if (character.y > 150 && jumpCount == 0){
+            character.y -=15;
         }
-        $(".character").css(({bottom: characterY + 'px'}))
+        $(".character").css(({bottom: character.y + 'px'}))
         setTimeout(gravity, 1000 / frames);
     }
     gravity();
@@ -54,12 +68,14 @@ document.addEventListener('DOMContentLoaded', () => {
         return enemy;
     }
     function createProjectile(x, y) {
+        console.log(character.x);
+        console.log(x);
         var proj = new Object();
         proj.element = "proj" + Math.floor(Math.random() * 100000);
         proj.x = x;
         proj.y = y;
         $("ul.projList").append('<li><div class=proj id=' + proj.element + '></div></li>')
-        $('#' + proj.element).css(({ bottom: y + 'px', left: x + 'px'}));
+        $('#' + proj.element).css(({ bottom: y + 'px', left: x + 'px' }));
         projArr.push(proj, direction);
         if (projArr.length > 10) {
             $("#" + projArr.shift().element).remove()
@@ -71,7 +87,8 @@ document.addEventListener('DOMContentLoaded', () => {
         var ground = new Object();
         ground.element = "ground" + Math.floor(Math.random() * 100000);
         ground.x = x;
-        ground.y = y; 
+        ground.y = y;
+        ground.AbsoluteX = x;
         ground.height = height;
         ground.width = width;
         $("ul.groundList").append('<li><div class=ground id=' + ground.element + '></div></li>')
@@ -79,8 +96,24 @@ document.addEventListener('DOMContentLoaded', () => {
         groundArr.push(ground)
         return ground;
     }
-    
 
+    function createGroundAuto(width, height) {
+        var ground = new Object();
+        ground.element = "ground" + Math.floor(Math.random() * 100000);
+        ground.x = groundArr[groundArr.length - 1].x+100;
+        ground.AbsoluteX = groundArr[groundArr.length - 1].AbsoluteX + 100;
+        ground.y = 0;
+        ground.width = width;
+        ground.height = height;
+        $("ul.groundList").append('<li><div class=ground id=' + ground.element + '></div></li>')
+        $('#' + ground.element).css(({ bottom: ground.y, left: ground.x, width: width + 'px', height: height + 'px' }));
+        groundArr.push(ground)
+        return ground;
+    }
+
+    function updateCharacter() {
+        $('#' + character.element).css('left', character.x + 'px');
+    }
     function updateGround() {
         groundArr.forEach(e => {
             $('#' + e.element).css('left', e.x + 'px');
@@ -88,12 +121,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateGroundArr() {
-        if (groundArr[0].x < -100) {
+        if (groundArr[0].AbsoluteX +groundArr[0].width < character.AbsoluteLeft) {
             groundArr.shift();
         }
-        while (groundArr.length < 40) {
-            createGround(groundArr[groundArr.length - 1].x + 100, 0, 100, 150);
+        while (groundArr.length < 20) {
+            createGroundAuto(100, 150);
         }
+        console.log(character.AbsoluteLeft, groundArr[0].AbsoluteX)
     }
 
     function updateEnemies() {
@@ -106,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
         projArr.forEach(e => {
             e.x += projSpeed;
             $('#' + e.element).css('left', e.x + 'px');
-            if (e.x > window.innerWidth){
+            if (e.x > window.innerWidth) {
                 $("#" + projArr.shift().element).remove();
             }
         });
@@ -132,15 +166,15 @@ document.addEventListener('DOMContentLoaded', () => {
     createEnemy(3, 500, 150, 20, 100);
     createEnemy(2, 800, 175, 60, 50);
 
-   createGround(0, 0, 100, 150);
-   updateGroundArr();
+    createGround(0, 0, 100, 150);
+    updateGroundArr();
     //Character jump motion
-    var characterY = 150;
+    character.y = 150;
     jumpCount = 0;
     function jump() {
-        characterY += 15;
+        character.y += 15;
         jumpCount++;
-        $(".character").css(({bottom: characterY + 'px'}))
+        $(".character").css(({bottom: character.y + 'px'}))
         if(jumpCount < 20){
             jumpingTimeout = setTimeout(jump, 1000 / frames);
         }
@@ -152,18 +186,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
         direction = 1
 
-        groundArr.forEach(e => {
-            e.x -= 20;
-        });
-       // $('div.ground').css('left', (parseInt($('div.ground').css('left')) - 20) + 'px');
-        enemyArr.forEach(e => {
-            e.x -= 20;
-        });
-        projArr.forEach(e => {
-            e.x -=20;
-        });
+        if (character.AbsoluteX < character.AbsoluteLeft + 400) {
+            character.x += playerSpeed;
+        } else {
+            
+            groundArr.forEach(e => {
+                e.x -= playerSpeed;
+            });
+            // $('div.ground').css('left', (parseInt($('div.ground').css('left')) - 20) + 'px');
+            enemyArr.forEach(e => {
+                e.x -= playerSpeed;
+            });
+            projArr.forEach(e => {
+                e.x -= playerSpeed;
+            });
+        }
+        character.AbsoluteX += playerSpeed;
+        if (character.AbsoluteX == character.AbsoluteLeft + 400 + 20*playerSpeed) {
+            character.AbsoluteLeft += playerSpeed;
+        }
         movingTimeout = setTimeout(moveRight, 1000 / frames);
-
+        updateCharacter();
         updateEnemies();
         updateProj();
         updateGround();
@@ -173,21 +216,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //Left movement
     function moveLeft() {
-
         direction = 2
-
-        groundArr.forEach(e => {
-            e.x += 20;
-        });
-        //$('div.ground').css('left', (parseInt($('div.ground').css('left')) + 20) + 'px');
-        enemyArr.forEach(e => {
-            e.x += 20;
-        });
-        projArr.forEach(e => {
-            e.x += 20
-        });
+        if (character.AbsoluteX > character.AbsoluteLeft) {
+            console.log("left1");
+            if (character.AbsoluteX <= character.AbsoluteLeft + 400) {
+                character.AbsoluteX -= playerSpeed;
+                character.x -= playerSpeed;
+            } else {
+                character.AbsoluteX -= playerSpeed;
+                groundArr.forEach(e => {
+                    e.x += playerSpeed;
+                });
+                //$('div.ground').css('left', (parseInt($('div.ground').css('left')) + 20) + 'px');
+                enemyArr.forEach(e => {
+                    e.x += playerSpeed;
+                });
+                projArr.forEach(e => {
+                    e.x += playerSpeed
+                });
+            }
+        }
         movingTimeout = setTimeout(moveLeft, 1000 / frames);
 
+        updateCharacter();
         updateEnemies();
         updateProj();
         updateGround();
@@ -198,18 +249,16 @@ document.addEventListener('DOMContentLoaded', () => {
     function shoot() {
         let laserID
         let currLaserID = 0;
-        character = document.querySelector('.character')
 
         /*xPos=character.style.left; ------> we should write function in terms of characters curr position pixel. 
         createProjectile(character.style.left+450+"px",character.style.bottom+790+'px');*/
 
-        createProjectile(450, characterY + 20);
+        createProjectile(character.x + character.width, character.y + 20);
         //Write function to move lasers
         function moveLasers() {
             var laserElem = document.getElementById(".character");
             updateProj;
         }
-        updateProj()
     }
 
     //When key is pressed
@@ -223,7 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
 
             case UP_KEY:  //up key
-            if (characterY <= 150){
+            if (character.y <= 150){
                 jump();
             }
                 break;
