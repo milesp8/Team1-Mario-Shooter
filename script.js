@@ -150,10 +150,10 @@ document.addEventListener('DOMContentLoaded', () => {
     var controller = new Object();
 
     const SPACE_KEY = 32; //shooting key.
-    const UP_KEY = 38; //double press jump key
-    const RIGHT_KEY = 39; //change direction key 
-    const DOWN_KEY = 40; //change direction key
-    const LEFT_KEY = 37; //Change dir key
+    const UP_KEY = 87; //double press jump key
+    const RIGHT_KEY = 68; //change direction key 
+    const DOWN_KEY = 83; //change direction key
+    const LEFT_KEY = 65; //Change dir key
 
 
 
