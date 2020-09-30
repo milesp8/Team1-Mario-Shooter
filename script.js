@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const projSpeed = 40;
     const tickSpeed = 30;
-    const playerSpeed = 20;
+    const playerSpeed = 10;
 
     // groundTop = 0;
 
@@ -147,6 +147,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function groundArrayIndex(xPos) {
+        dif = xPos - groundarr[0].AbsoluteX;
+        index = Math.floor(dif/100);
+        return index;
+    }
+
+    function groundArrayIndex(character) {
+        dif = character.AbsoluteX - groundarr[0].AbsoluteX;
+        index = Math.floor(dif/100);
+        return index;
+    }
 
     var controller = new Object();
 
