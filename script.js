@@ -149,11 +149,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     var controller = new Object();
 
-    var SPACE_KEY = 32; //shooting key.
-    var UP_KEY = 38; //double press jump key
-    var RIGHT_KEY = 39; //change direction key 
-    var DOWN_KEY = 40; //change direction key
-    var LEFT_KEY = 37; //Change dir key
+    const SPACE_KEY = 32; //shooting key.
+    const UP_KEY = 38; //double press jump key
+    const RIGHT_KEY = 39; //change direction key 
+    const DOWN_KEY = 40; //change direction key
+    const LEFT_KEY = 37; //Change dir key
 
 
 
@@ -298,25 +298,25 @@ document.addEventListener('DOMContentLoaded', () => {
     //When key is released
     $(document).keyup(function (e) {
         switch (e.which) {
-            case 37:  //left key
+            case LEFT_KEY:  //left key
                 clearTimeout(movingTimeout);
                 movingTimeout = -1;
 
                 break;
 
-            case 38:  //up key
+            case UP_KEY:  //up key
 
                 $('div.character').stop(false, true);
 
                 break;
 
-            case 39:  //right key
+            case RIGHT_KEY:  //right key
                 clearTimeout(movingTimeout);
                 movingTimeout = -1;
 
                 break;
 
-            case 40:  //down key
+            case DOWN_KEY:  //down key
                 break;
 
             default: return;
