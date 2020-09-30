@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     var GROUND_WIDTH = 100;
     //$(".game-container").css(({width: window.innerWidth + 'px'}));
     //$(".game-container").css(({height: window.innerHeight + 'px'}));
-    var direction = 1  //direction of the character and projectile ( 1 = right, 2 = left)
+    var direction = 1  //direction of the character and projectile ( 1 = right, -1 = left)
 
     const projSpeed = 40;
     const tickSpeed = 30;
@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //Left movement
     function moveLeft() {
-        direction = 2
+        direction = -1
         $("#character").css(({transform: "scaleX(-1)"}));
         if (character.AbsoluteX > character.AbsoluteLeft) {
             console.log("left1");
