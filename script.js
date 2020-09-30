@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //$(".game-container").css(({width: window.innerWidth + 'px'}));
     //$(".game-container").css(({height: window.innerHeight + 'px'}));
     var direction = 1  //direction of the character and projectile ( 1 = right, -1 = left)
+    var isMoving = 0 //Tracks if the player is moving or not, 0 if still, 10 if moving
 
     const projSpeed = 40;
     const tickSpeed = 30;
@@ -139,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateProj() {
         projArr.forEach(e => {
-            e.x += projSpeed * e.dir + 10;
+            e.x += projSpeed * e.dir + isMoving;
             $('#' + e.element).css('left', e.x + 'px');
             if (e.x > window.innerWidth || e.x <= 0) {
                 $("#" + projArr.shift().element).remove();
@@ -279,20 +280,21 @@ document.addEventListener('DOMContentLoaded', () => {
     $(document).keydown(function (e) {
         switch (e.which) {
             case LEFT_KEY:  //left key
-
+            isMoving = 10;
                 if (movingTimeout === -1) {
                     moveLeft();
                 }
                 break;
 
             case UP_KEY:  //up key
+            
             if (character.y <= 150){
                 jump();
             }
                 break;
 
             case RIGHT_KEY:  //right key
-
+            isMoving = 10;
                 if (movingTimeout === -1) {
                     moveRight();
                 }
@@ -315,6 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
             case LEFT_KEY:  //left key
                 clearTimeout(movingTimeout);
                 movingTimeout = -1;
+                isMoving = 0;
 
                 break;
 
@@ -327,6 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
             case RIGHT_KEY:  //right key
                 clearTimeout(movingTimeout);
                 movingTimeout = -1;
+                isMoving = 0;
 
                 break;
 
