@@ -30,11 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
     var enemyArr = [];
     var projArr = [];
     function gravity(){
-        if (characterY >= 150 && jumpCount == 0){
-            characterY -=7;
+        if (characterY > 150 && jumpCount == 0){
+            characterY -=15;
         }
         $(".character").css(({bottom: characterY + 'px'}))
-        setTimeout(gravity, 100 / frames);
+        setTimeout(gravity, 1000 / frames);
     }
     gravity();
     function createEnemy(health, x, y, width, height) {
@@ -138,11 +138,11 @@ document.addEventListener('DOMContentLoaded', () => {
     var characterY = 150;
     jumpCount = 0;
     function jump() {
-        characterY += 7;
+        characterY += 15;
         jumpCount++;
         $(".character").css(({bottom: characterY + 'px'}))
-        if(jumpCount < 35){
-            jumpingTimeout = setTimeout(jump, 100 / frames);
+        if(jumpCount < 20){
+            jumpingTimeout = setTimeout(jump, 1000 / frames);
         }
         else{jumpCount = 0}
     }
