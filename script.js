@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (groundArr[0].AbsoluteX +groundArr[0].width < character.AbsoluteLeft) {
             groundArr.shift();
         }
-        while (groundArr.length < 20) {
+        while (groundArr.length < 25) {
             createGroundAuto(100, 150);
         }
         console.log(character.AbsoluteLeft, groundArr[0].AbsoluteX)
