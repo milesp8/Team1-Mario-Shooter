@@ -74,6 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
         proj.element = "proj" + Math.floor(Math.random() * 100000);
         proj.x = x;
         proj.y = y;
+        proj.dir = direction;
         $("ul.projList").append('<li><div class=proj id=' + proj.element + '></div></li>')
         $('#' + proj.element).css(({ bottom: y + 'px', left: x + 'px' }));
         projArr.push(proj, direction);
@@ -138,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateProj() {
         projArr.forEach(e => {
-            e.x += projSpeed;
+            e.x += projSpeed * e.dir;
             $('#' + e.element).css('left', e.x + 'px');
             if (e.x > window.innerWidth) {
                 $("#" + projArr.shift().element).remove();
