@@ -29,7 +29,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     var enemyArr = [];
     var projArr = [];
-
+    function gravity(){
+        if (characterY >= 150 && jumpCount == 0){
+            characterY -=7;
+        }
+        $(".character").css(({bottom: characterY + 'px'}))
+        setTimeout(gravity, 100 / frames);
+    }
+    gravity();
     function createEnemy(health, x, y, width, height) {
         var enemy = new Object();
         enemy.element = "enemy" + Math.floor(Math.random() * 100000);
@@ -84,8 +91,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (groundArr[0].x < -100) {
             groundArr.shift();
         }
-        while (groundArr.length < 40) {
-            createGround(groundArr[groundArr.length - 1].x + 100, 0, 100, 150);
+        while (groundArr.length < 19) {
+            createGround(groundArr[groundArr.length - 1].x + 100, 0, 117, 150);
         }
     }
 
@@ -128,23 +135,16 @@ document.addEventListener('DOMContentLoaded', () => {
    createGround(0, 0, 100, 150);
    updateGroundArr();
     //Character jump motion
+    var characterY = 150;
+    jumpCount = 0;
     function jump() {
-        if (isJumping === false) {
-
-            isJumping = true;
-
-            //Upward and downward motion animation
-            $('div.character').animate({ top: '-=25%' }, {
-                duration: 250
-            }
-            ).animate({ top: '+=25%' }, {
-                duration: 250
-            }).promise().done(function () {
-                isJumping = false;
-            });;
-
-
+        characterY += 7;
+        jumpCount++;
+        $(".character").css(({bottom: characterY + 'px'}))
+        if(jumpCount < 35){
+            jumpingTimeout = setTimeout(jump, 100 / frames);
         }
+        else{jumpCount = 0}
     }
 
     //Right movement
@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
         /*xPos=character.style.left; ------> we should write function in terms of characters curr position pixel. 
         createProjectile(character.style.left+450+"px",character.style.bottom+790+'px');*/
 
-        createProjectile(450,160);
+        createProjectile(450, characterY + 20);
         //Write function to move lasers
         function moveLasers() {
             var laserElem = document.getElementById(".character");
@@ -223,7 +223,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
 
             case UP_KEY:  //up key
+            if (characterY <= 150){
                 jump();
+            }
                 break;
 
             case RIGHT_KEY:  //right key
