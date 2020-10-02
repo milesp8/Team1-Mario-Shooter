@@ -293,7 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             case UP_KEY:  //up key
             
-            if (character.y <= 150){
+            if (character.y == groundArr[groundArrayIndex(character)].height){
                 jump();
             }
                 break;
