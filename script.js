@@ -180,6 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
     var isJumping = false;
     var movingTimeout = -1;
     var frames = 60;
+    var shootingTimeout = -1;
 
     //creates test enemies
     createEnemy(3, 500, 150, 20, 100);
@@ -276,16 +277,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function shoot() {
         let laserID
         let currLaserID = 0;
+        createProjectile(character.x + character.width / 3, character.y + 20);
+        shootingTimeout = setTimeout(shoot, 1000);
 
         /*xPos=character.style.left; ------> we should write function in terms of characters curr position pixel. 
         createProjectile(character.style.left+450+"px",character.style.bottom+790+'px');*/
 
-        createProjectile(character.x + character.width / 3, character.y + 20);
+
         //Write function to move lasers
-        function moveLasers() {
-            //var laserElem = document.getElementById(".character");
-            //updateProj;
-        }
     }
 
     //When key is pressed
@@ -316,7 +315,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
 
             case SPACE_KEY:
-                shoot();
+                if (shootingTimeout === -1) {
+                    shoot();}
                 break;
 
             default: return;
@@ -347,6 +347,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
 
             case DOWN_KEY:  //down key
+                break;
+                
+            case SPACE_KEY:
+                clearTimeout(shootingTimeout);
+                shootingTimeout = -1;
                 break;
 
             default: return;
