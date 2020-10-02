@@ -77,6 +77,9 @@ document.addEventListener('DOMContentLoaded', () => {
         proj.dir = direction;
         $("ul.projList").append('<li><div class=proj id=' + proj.element + '></div></li>')
         $('#' + proj.element).css(({ bottom: y + 'px', left: x + 'px' }));
+        if(direction == -1){
+            $('#' + proj.element).css(({transform: "scaleX(-1)"}));
+        }
         projArr.push(proj, direction);
         if (projArr.length > 10) {
             $("#" + projArr.shift().element).parent().remove()
