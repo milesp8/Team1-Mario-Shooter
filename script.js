@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateGroundArr() {
         if (groundArr[0].AbsoluteX + groundArr[0].width < character.AbsoluteLeft) {
-            groundArr.shift();
+            $("#" + groundArr.shift().element).parent().remove()
         }
         while (groundArr.length < 25) {
             createGroundAuto(100);
