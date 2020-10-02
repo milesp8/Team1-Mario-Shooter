@@ -1,6 +1,5 @@
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("true")
     var enemyArr = [];
     var projArr = [[], []];
     var groundArr = [];
@@ -13,7 +12,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const projSpeed = 40;
     const tickSpeed = 30;
     const playerSpeed = 10;
-    groundHeights = [20, 100, 200, 300];
+
+    const PIT = 20;
+    const LOW = 100;
+    const MEDIUM = 200;
+    const HIGH = 300;
+    groundHeights = [PIT, LOW, MEDIUM, HIGH];
+
+
+
+
+    currentTerrainCounter = 0;
+    const FLAT = 0;
+    const BIGHILLUP = 1;
+    const FLATBIGHILL = 2;
+    const SMALLHILL = 3;
+    const SPIKES = 4;
+    const BIGHILLDOWN = 5;
+    terrainTypes = [FLAT, BIGHILLUP, FLATBIGHILL, SMALLHILL, SPIKES, BIGHILLDOWN];
+    currentTerrainType = terrainTypes[FLAT];
 
     // groundTop = 0;
 
@@ -41,8 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
     character.height = 50;
     character.AbsoluteX = 0;
     character.AbsoluteLeft = 0;
-    console.log(character.AbsoluteX);
-    console.log(character.AbsoluteLeft)
     updateCharacter();
 
     function gravity() {
@@ -109,7 +124,151 @@ document.addEventListener('DOMContentLoaded', () => {
         ground.AbsoluteX = groundArr[groundArr.length - 1].AbsoluteX + 100;
         ground.y = 0;
         ground.width = width;
-        ground.height = groundHeights[Math.floor(Math.random() * groundHeights.length)];
+        console.log(currentTerrainCounter, currentTerrainType)
+        switch (currentTerrainType) {
+            case FLAT:
+                if (currentTerrainCounter < 3) {
+                    currentTerrainCounter++;
+                    ground.height = LOW;
+                } else {
+                    currentTerrainType = terrainTypes[Math.floor(Math.random() * (terrainTypes.length - 1))];
+                    currentTerrainCounter = 1;
+                    switch (currentTerrainType) {
+                        case FLAT:
+                            ground.height = LOW;
+                            break;
+                        case BIGHILLUP:
+                            ground.height = MEDIUM;
+                            break;
+                        case FLATBIGHILL:
+                            ground.height = HIGH;
+                            break;
+                        case SMALLHILL:
+                            ground.height = MEDIUM;
+                            break;
+                        case SPIKES:
+                            ground.height = PIT;
+                            break;
+                        default:
+                            console.log("SOMETHING IS WRONG");
+                    }
+                }
+                break;
+            case BIGHILLUP:
+                if (currentTerrainCounter < 3) {
+                    goUp = Math.floor(Math.random() * 2);
+                    if (goUp == 1) {
+                        ground.height = HIGH;
+                        currentTerrainCounter = 1;
+                        currentTerrainType = BIGHILLDOWN;
+                    } else {
+                        ground.height = MEDIUM;
+                        currentTerrainCounter++;
+                    }
+                } else {
+                    ground.height = HIGH;
+                    currentTerrainCounter = 1;
+                    currentTerrainType = BIGHILLDOWN;
+                }
+                break;
+            case BIGHILLDOWN:
+                if (groundArr[groundArr.length - 1].height == HIGH) {
+                    if (currentTerrainCounter < 3) {
+                        ground.height = HIGH;
+                        currentTerrainCounter++;
+                    } else if (currentTerrainCounter < 5) {
+                        goDown = Math.floor(Math.random() * 2);
+                        if (goDown == 1) {
+                            ground.height = MEDIUM;
+                            currentTerrainCounter = 1;
+                        } else {
+                            ground.height = HIGH;
+                            currentTerrainCounter++;
+                        }
+                    } else {
+                        ground.height = MEDIUM;
+                        currentTerrainCounter = 1;
+                    }
+                } else {
+                    if (currentTerrainCounter < 3) {
+                        goDown = Math.floor(Math.random() * 2);
+                        if (goDown == 1) {
+                            ground.height = LOW;
+                            currentTerrainCounter = 1;
+                            currentTerrainType = FLAT;
+                        } else {
+                            ground.height = MEDIUM;
+                            currentTerrainCounter++;
+                        }
+                    } else {
+                        ground.height = LOW;
+                        currentTerrainCounter = 1;
+                        currentTerrainType = FLAT;
+                    }
+                }
+                break;
+            case FLATBIGHILL:
+                if (currentTerrainCounter < 3) {
+                    ground.height = HIGH;
+                    currentTerrainCounter++;
+                } else if (currentTerrainCounter < 5) {
+                    goDown = Math.floor(Math.random() * 2);
+                    if (goDown == 1) {
+                        ground.height = LOW;
+                        currentTerrainCounter = 1;
+                        currentTerrainType = FLAT;
+                    } else {
+                        ground.height = HIGH;
+                        currentTerrainCounter++;
+                    }
+                } else {
+                    ground.height = LOW;
+                    currentTerrainCounter = 1;
+                    currentTerrainType = FLAT;
+                }
+                break;
+            case SMALLHILL:
+                if (currentTerrainCounter < 3) {
+                    ground.height = MEDIUM;
+                    currentTerrainCounter++;
+                } else if (currentTerrainCounter < 5) {
+                    goDown = Math.floor(Math.random() * 2);
+                    if (goDown == 1) {
+                        ground.height = LOW;
+                        currentTerrainCounter = 1;
+                        currentTerrainType = FLAT;
+                    } else {
+                        ground.height = MEDIUM;
+                        currentTerrainCounter++;
+                    }
+                } else {
+                    ground.height = LOW;
+                    currentTerrainCounter = 1;
+                    currentTerrainType = FLAT;
+                }
+                break;
+            case SPIKES:
+                console.log("SPIKES");
+                if (currentTerrainCounter < 2) {
+                    goUp = Math.floor(Math.random() * 2);
+                    if (goUp == 1) {
+                        ground.height = LOW;
+                        currentTerrainCounter = 1;
+                        currentTerrainType = FLAT;
+                    } else {
+                        ground.height = PIT;
+                        currentTerrainCounter++;
+                    }
+                } else {
+                    ground.height = LOW;
+                    currentTerrainCounter = 1;
+                    currentTerrainType = FLAT;
+                }
+                break;
+
+        }
+        console.log(ground.height, currentTerrainCounter, currentTerrainType)
+        //ground.height = groundHeights[Math.floor(Math.random() * groundHeights.length)];
         $("ul.groundList").append('<li><div class=ground id=' + ground.element + '></div></li>')
         $('#' + ground.element).css(({ bottom: ground.y, left: ground.x, width: width + 'px', height: ground.height + 'px' }));
         groundArr.push(ground)
@@ -132,7 +291,6 @@ document.addEventListener('DOMContentLoaded', () => {
         while (groundArr.length < 25) {
             createGroundAuto(100);
         }
-        console.log(character.AbsoluteLeft, groundArr[0].AbsoluteX)
     }
 
     function updateEnemies() {
@@ -152,11 +310,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function groundArrayIndex2(xPos) {
-        console.log(xPos);
         dif = xPos - groundArr[0].AbsoluteX;
-        console.log(dif);
         index = Math.floor(dif / 100);
-        console.log(index);
         return index;
     }
 
@@ -208,7 +363,7 @@ document.addEventListener('DOMContentLoaded', () => {
         direction = 1
         $("#character").css(({ transform: "scaleX(1)" }));
 
-        if (character.y >=groundArr[groundArrayIndex2(character.AbsoluteX + character.width + playerSpeed)].height) {
+        if (character.y >= groundArr[groundArrayIndex2(character.AbsoluteX + character.width + playerSpeed)].height) {
             if (character.AbsoluteX < character.AbsoluteLeft + 400) {
                 character.x += playerSpeed;
             } else {
@@ -244,7 +399,6 @@ document.addEventListener('DOMContentLoaded', () => {
         $("#character").css(({ transform: "scaleX(-1)" }));
         if (character.AbsoluteX > character.AbsoluteLeft) {
             if (character.y >= groundArr[groundArrayIndex2(character.AbsoluteX - playerSpeed)].height) {
-                console.log("left1");
                 if (character.AbsoluteX <= character.AbsoluteLeft + 400) {
                     character.AbsoluteX -= playerSpeed;
                     character.x -= playerSpeed;
