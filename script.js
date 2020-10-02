@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const projSpeed = 40;
     const tickSpeed = 30;
     const playerSpeed = 10;
+    const ShootingTick =300;
     groundHeights = [20, 100, 200, 300];
 
     // groundTop = 0;
@@ -278,7 +279,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let laserID
         let currLaserID = 0;
         createProjectile(character.x + character.width / 3, character.y + 20);
-        shootingTimeout = setTimeout(shoot, 1000);
+        shootingTimeout = setTimeout(shoot, ShootingTick);
 
         /*xPos=character.style.left; ------> we should write function in terms of characters curr position pixel. 
         createProjectile(character.style.left+450+"px",character.style.bottom+790+'px');*/
