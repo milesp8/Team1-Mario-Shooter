@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCharacter();
 
     function gravity() {
-        if (character.y > groundArr[groundArrayIndex(character)].height && jumpCount == 0) {
+        if (character.y > Math.max(groundArr[groundArrayIndex(character)].height, groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1)].height) && jumpCount == 0) {
             character.y -= 20;
         }
         $(".character").css(({ bottom: character.y + 'px' }))
@@ -286,7 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateGroundArr() {
         if (groundArr[0].AbsoluteX + groundArr[0].width < character.AbsoluteLeft) {
-            groundArr.shift();
+            $("#" + groundArr.shift().element).parent().remove()
         }
         while (groundArr.length < 25) {
             createGroundAuto(100);
@@ -335,6 +335,7 @@ document.addEventListener('DOMContentLoaded', () => {
     var isJumping = false;
     var movingTimeout = -1;
     var frames = 60;
+    var shootingTimeout = -1;
 
     //creates test enemies
     createEnemy(3, 500, 150, 20, 100);
@@ -345,7 +346,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //Character jump motion
     gravity();
-    character.y = groundArr[groundArrayIndex(character)].height;
+    character.y = Math.max(groundArr[groundArrayIndex(character)].height, groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1)].height);
     jumpCount = 0;
     function jump() {
         character.y += 15;
@@ -363,7 +364,7 @@ document.addEventListener('DOMContentLoaded', () => {
         direction = 1
         $("#character").css(({ transform: "scaleX(1)" }));
 
-        if (character.y >= groundArr[groundArrayIndex2(character.AbsoluteX + character.width + playerSpeed)].height) {
+        if (character.y >=groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1 + playerSpeed)].height) {
             if (character.AbsoluteX < character.AbsoluteLeft + 400) {
                 character.x += playerSpeed;
             } else {
@@ -430,16 +431,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function shoot() {
         let laserID
         let currLaserID = 0;
+        createProjectile(character.x + character.width / 3, character.y + 20);
+        shootingTimeout = setTimeout(shoot, 1000);
 
         /*xPos=character.style.left; ------> we should write function in terms of characters curr position pixel. 
         createProjectile(character.style.left+450+"px",character.style.bottom+790+'px');*/
 
-        createProjectile(character.x + character.width / 3, character.y + 20);
+
         //Write function to move lasers
-        function moveLasers() {
-            //var laserElem = document.getElementById(".character");
-            //updateProj;
-        }
     }
 
     //When key is pressed
@@ -454,7 +453,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             case UP_KEY:  //up key
 
-                if (character.y <= groundArr[groundArrayIndex(character)].height) {
+                if (character.y <= Math.max(groundArr[groundArrayIndex(character)].height, groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1)].height)) {
                     jump();
                 }
                 break;
@@ -470,7 +469,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
 
             case SPACE_KEY:
-                shoot();
+                if (shootingTimeout === -1) {
+                    shoot();}
                 break;
 
             default: return;
@@ -501,6 +501,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
 
             case DOWN_KEY:  //down key
+                break;
+                
+            case SPACE_KEY:
+                clearTimeout(shootingTimeout);
+                shootingTimeout = -1;
                 break;
 
             default: return;
