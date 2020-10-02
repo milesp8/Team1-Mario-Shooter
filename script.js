@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function createGroundAuto(width) {
         var ground = new Object();
         ground.element = "ground" + Math.floor(Math.random() * 100000);
-        ground.x = groundArr[groundArr.length - 1].x + 100;
+        ground.x = groundArr[groundArr.length - 1].x + GROUND_WIDTH;
         ground.AbsoluteX = groundArr[groundArr.length - 1].AbsoluteX + 100;
         ground.y = 0;
         ground.width = width;
@@ -289,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
             $("#" + groundArr.shift().element).parent().remove()
         }
         while (groundArr.length < 25) {
-            createGroundAuto(100);
+            createGroundAuto(GROUND_WIDTH);
         }
     }
 
@@ -311,13 +311,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function groundArrayIndex2(xPos) {
         dif = xPos - groundArr[0].AbsoluteX;
-        index = Math.floor(dif / 100);
+        index = Math.floor(dif / GROUND_WIDTH);
         return index;
     }
 
     function groundArrayIndex(character) {
         dif = character.AbsoluteX - groundArr[0].AbsoluteX;
-        index = Math.floor(dif / 100);
+        index = Math.floor(dif / GROUND_WIDTH);
         return index;
     }
 
@@ -341,7 +341,7 @@ document.addEventListener('DOMContentLoaded', () => {
     createEnemy(3, 500, 150, 20, 100);
     createEnemy(2, 800, 175, 60, 50);
 
-    createGround(0, 0, 100, 100);
+    createGround(0, 0, GROUND_WIDTH, LOW);
     updateGroundArr();
 
     //Character jump motion

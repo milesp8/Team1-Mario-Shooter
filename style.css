@@ -28,6 +28,7 @@ body {
     position:absolute;
     left: 400px;
     bottom: 150px;
+    z-index: 99;
 }
 
 .enemy {
