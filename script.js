@@ -45,11 +45,11 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log(character.AbsoluteLeft)
     updateCharacter();
 
-    function gravity(){
-        if (character.y > groundArr[groundArrayIndex(character)].height && jumpCount == 0){
-            character.y -=20;
+    function gravity() {
+        if (character.y > groundArr[groundArrayIndex(character)].height && jumpCount == 0) {
+            character.y -= 20;
         }
-        $(".character").css(({bottom: character.y + 'px'}))
+        $(".character").css(({ bottom: character.y + 'px' }))
         setTimeout(gravity, 1000 / frames);
     }
     function createEnemy(health, x, y, width, height) {
@@ -78,8 +78,8 @@ document.addEventListener('DOMContentLoaded', () => {
         proj.dir = direction;
         $("ul.projList").append('<li><div class=proj id=' + proj.element + '></div></li>')
         $('#' + proj.element).css(({ bottom: y + 'px', left: x + 'px' }));
-        if(direction == -1){
-            $('#' + proj.element).css(({transform: "scaleX(-1)"}));
+        if (direction == -1) {
+            $('#' + proj.element).css(({ transform: "scaleX(-1)" }));
         }
         projArr.push(proj, direction);
         if (projArr.length > 10) {
@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function createGroundAuto(width) {
         var ground = new Object();
         ground.element = "ground" + Math.floor(Math.random() * 100000);
-        ground.x = groundArr[groundArr.length - 1].x+100;
+        ground.x = groundArr[groundArr.length - 1].x + 100;
         ground.AbsoluteX = groundArr[groundArr.length - 1].AbsoluteX + 100;
         ground.y = 0;
         ground.width = width;
@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateGroundArr() {
-        if (groundArr[0].AbsoluteX +groundArr[0].width < character.AbsoluteLeft) {
+        if (groundArr[0].AbsoluteX + groundArr[0].width < character.AbsoluteLeft) {
             groundArr.shift();
         }
         while (groundArr.length < 25) {
@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateProj() {
         projArr.forEach(e => {
-            e.x += (projSpeed + isMoving) * e.dir; 
+            e.x += (projSpeed + isMoving) * e.dir;
             $('#' + e.element).css('left', e.x + 'px');
             if (e.x > window.innerWidth || e.x <= 0) {
                 $("#" + projArr.shift().element).parent().remove();
@@ -151,15 +151,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function groundArrayIndex(xPos) {
+    function groundArrayIndex2(xPos) {
+        console.log(xPos);
         dif = xPos - groundArr[0].AbsoluteX;
-        index = Math.floor(dif/100);
+        console.log(dif);
+        index = Math.floor(dif / 100);
+        console.log(index);
         return index;
     }
 
     function groundArrayIndex(character) {
         dif = character.AbsoluteX - groundArr[0].AbsoluteX;
-        index = Math.floor(dif/100);
+        index = Math.floor(dif / 100);
         return index;
     }
 
@@ -192,37 +195,39 @@ document.addEventListener('DOMContentLoaded', () => {
     function jump() {
         character.y += 15;
         jumpCount++;
-        $(".character").css(({bottom: character.y + 'px'}))
-        if(jumpCount < 20){
+        $(".character").css(({ bottom: character.y + 'px' }))
+        if (jumpCount < 20) {
             jumpingTimeout = setTimeout(jump, 1000 / frames);
         }
-        else{jumpCount = 0}
+        else { jumpCount = 0 }
     }
 
     //Right movement
     function moveRight() {
 
         direction = 1
-        $("#character").css(({transform: "scaleX(1)"}));
+        $("#character").css(({ transform: "scaleX(1)" }));
 
-        if (character.AbsoluteX < character.AbsoluteLeft + 400) {
-            character.x += playerSpeed;
-        } else {
-            
-            groundArr.forEach(e => {
-                e.x -= playerSpeed;
-            });
-            // $('div.ground').css('left', (parseInt($('div.ground').css('left')) - 20) + 'px');
-            enemyArr.forEach(e => {
-                e.x -= playerSpeed;
-            });
-            projArr.forEach(e => {
-                e.x -= playerSpeed;
-            });
-        }
-        character.AbsoluteX += playerSpeed;
-        if (character.AbsoluteX == character.AbsoluteLeft + 400 + 20*playerSpeed) {
-            character.AbsoluteLeft += playerSpeed;
+        if (character.y >=groundArr[groundArrayIndex2(character.AbsoluteX + character.width + playerSpeed)].height) {
+            if (character.AbsoluteX < character.AbsoluteLeft + 400) {
+                character.x += playerSpeed;
+            } else {
+
+                groundArr.forEach(e => {
+                    e.x -= playerSpeed;
+                });
+                // $('div.ground').css('left', (parseInt($('div.ground').css('left')) - 20) + 'px');
+                enemyArr.forEach(e => {
+                    e.x -= playerSpeed;
+                });
+                projArr.forEach(e => {
+                    e.x -= playerSpeed;
+                });
+            }
+            character.AbsoluteX += playerSpeed;
+            if (character.AbsoluteX == character.AbsoluteLeft + 400 + 20 * playerSpeed) {
+                character.AbsoluteLeft += playerSpeed;
+            }
         }
         movingTimeout = setTimeout(moveRight, 1000 / frames);
         updateCharacter();
@@ -236,24 +241,26 @@ document.addEventListener('DOMContentLoaded', () => {
     //Left movement
     function moveLeft() {
         direction = -1
-        $("#character").css(({transform: "scaleX(-1)"}));
+        $("#character").css(({ transform: "scaleX(-1)" }));
         if (character.AbsoluteX > character.AbsoluteLeft) {
-            console.log("left1");
-            if (character.AbsoluteX <= character.AbsoluteLeft + 400) {
-                character.AbsoluteX -= playerSpeed;
-                character.x -= playerSpeed;
-            } else {
-                character.AbsoluteX -= playerSpeed;
-                groundArr.forEach(e => {
-                    e.x += playerSpeed;
-                });
-                //$('div.ground').css('left', (parseInt($('div.ground').css('left')) + 20) + 'px');
-                enemyArr.forEach(e => {
-                    e.x += playerSpeed;
-                });
-                projArr.forEach(e => {
-                    e.x += playerSpeed
-                });
+            if (character.y >= groundArr[groundArrayIndex2(character.AbsoluteX - playerSpeed)].height) {
+                console.log("left1");
+                if (character.AbsoluteX <= character.AbsoluteLeft + 400) {
+                    character.AbsoluteX -= playerSpeed;
+                    character.x -= playerSpeed;
+                } else {
+                    character.AbsoluteX -= playerSpeed;
+                    groundArr.forEach(e => {
+                        e.x += playerSpeed;
+                    });
+                    //$('div.ground').css('left', (parseInt($('div.ground').css('left')) + 20) + 'px');
+                    enemyArr.forEach(e => {
+                        e.x += playerSpeed;
+                    });
+                    projArr.forEach(e => {
+                        e.x += playerSpeed
+                    });
+                }
             }
         }
         movingTimeout = setTimeout(moveLeft, 1000 / frames);
@@ -285,21 +292,21 @@ document.addEventListener('DOMContentLoaded', () => {
     $(document).keydown(function (e) {
         switch (e.which) {
             case LEFT_KEY:  //left key
-            isMoving = 10;
+                isMoving = 10;
                 if (movingTimeout === -1) {
                     moveLeft();
                 }
                 break;
 
             case UP_KEY:  //up key
-            
-            if (character.y == groundArr[groundArrayIndex(character)].height){
-                jump();
-            }
+
+                if (character.y <= groundArr[groundArrayIndex(character)].height) {
+                    jump();
+                }
                 break;
 
             case RIGHT_KEY:  //right key
-            isMoving = 10;
+                isMoving = 10;
                 if (movingTimeout === -1) {
                     moveRight();
                 }
