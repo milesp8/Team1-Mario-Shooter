@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const projSpeed = 40;
     const tickSpeed = 30;
     const playerSpeed = 10;
+    groundHeights = [20, 100, 200, 300];
 
     // groundTop = 0;
 
@@ -46,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function gravity(){
         if (character.y > groundArr[groundArrayIndex(character)].height && jumpCount == 0){
-            character.y -=15;
+            character.y -=20;
         }
         $(".character").css(({bottom: character.y + 'px'}))
         setTimeout(gravity, 1000 / frames);
@@ -101,16 +102,16 @@ document.addEventListener('DOMContentLoaded', () => {
         return ground;
     }
 
-    function createGroundAuto(width, height) {
+    function createGroundAuto(width) {
         var ground = new Object();
         ground.element = "ground" + Math.floor(Math.random() * 100000);
         ground.x = groundArr[groundArr.length - 1].x+100;
         ground.AbsoluteX = groundArr[groundArr.length - 1].AbsoluteX + 100;
         ground.y = 0;
         ground.width = width;
-        ground.height = height;
+        ground.height = groundHeights[Math.floor(Math.random() * groundHeights.length)];
         $("ul.groundList").append('<li><div class=ground id=' + ground.element + '></div></li>')
-        $('#' + ground.element).css(({ bottom: ground.y, left: ground.x, width: width + 'px', height: height + 'px' }));
+        $('#' + ground.element).css(({ bottom: ground.y, left: ground.x, width: width + 'px', height: ground.height + 'px' }));
         groundArr.push(ground)
         return ground;
     }
@@ -129,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
             groundArr.shift();
         }
         while (groundArr.length < 25) {
-            createGroundAuto(100, 150);
+            createGroundAuto(100);
         }
         console.log(character.AbsoluteLeft, groundArr[0].AbsoluteX)
     }
