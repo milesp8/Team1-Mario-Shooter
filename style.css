@@ -24,7 +24,7 @@ body {
     background-image: url(assets/Player/mariosmall.png);
     background-color: red;
     height: 50px;
-    width: 30px;
+    width: 40px;
     position:absolute;
     left: 400px;
     bottom: 150px;
