@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCharacter();
 
     function gravity() {
-        if (character.y > groundArr[groundArrayIndex(character)].height && jumpCount == 0) {
+        if (character.y > Math.max(groundArr[groundArrayIndex(character)].height, groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1)].height) && jumpCount == 0) {
             character.y -= 20;
         }
         $(".character").css(({ bottom: character.y + 'px' }))
@@ -191,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //Character jump motion
     gravity();
-    character.y = groundArr[groundArrayIndex(character)].height;
+    character.y = Math.max(groundArr[groundArrayIndex(character)].height, groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1)].height);
     jumpCount = 0;
     function jump() {
         character.y += 15;
@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
         direction = 1
         $("#character").css(({ transform: "scaleX(1)" }));
 
-        if (character.y >=groundArr[groundArrayIndex2(character.AbsoluteX + character.width + playerSpeed)].height) {
+        if (character.y >=groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1 + playerSpeed)].height) {
             if (character.AbsoluteX < character.AbsoluteLeft + 400) {
                 character.x += playerSpeed;
             } else {
@@ -299,7 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             case UP_KEY:  //up key
 
-                if (character.y <= groundArr[groundArrayIndex(character)].height) {
+                if (character.y <= Math.max(groundArr[groundArrayIndex(character)].height, groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1)].height)) {
                     jump();
                 }
                 break;
