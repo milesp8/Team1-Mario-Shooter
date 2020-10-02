@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
         $('#' + enemy.element).css(({ bottom: y + 'px', left: x + 'px', width: width + 'px', height: height + 'px' }));
         enemyArr.push(enemy)
         if (enemyArr.length > 10) {
-            $("#" + enemyArr.shift().element).remove();
+            $("#" + enemyArr.shift().element).parent().remove();
         }
         return enemy;
     }
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
         $('#' + proj.element).css(({ bottom: y + 'px', left: x + 'px' }));
         projArr.push(proj, direction);
         if (projArr.length > 10) {
-            $("#" + projArr.shift().element).remove()
+            $("#" + projArr.shift().element).parent().remove()
         }
         return proj;
     }
@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.x += (projSpeed + isMoving) * e.dir; 
             $('#' + e.element).css('left', e.x + 'px');
             if (e.x > window.innerWidth || e.x <= 0) {
-                $("#" + projArr.shift().element).remove();
+                $("#" + projArr.shift().element).parent().remove();
             }
         });
     }
