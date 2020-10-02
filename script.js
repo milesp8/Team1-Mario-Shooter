@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
     createEnemy(3, 500, 150, 20, 100);
     createEnemy(2, 800, 175, 60, 50);
 
-    createGround(0, 0, 100, 150);
+    createGround(0, 0, 100, 100);
     updateGroundArr();
 
     //Character jump motion
