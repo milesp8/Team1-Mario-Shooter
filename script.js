@@ -45,13 +45,12 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCharacter();
 
     function gravity(){
-        if (character.y > 150 && jumpCount == 0){
+        if (character.y > groundArr[groundArrayIndex(character)].height && jumpCount == 0){
             character.y -=15;
         }
         $(".character").css(({bottom: character.y + 'px'}))
         setTimeout(gravity, 1000 / frames);
     }
-    gravity();
     function createEnemy(health, x, y, width, height) {
         var enemy = new Object();
         enemy.element = "enemy" + Math.floor(Math.random() * 100000);
@@ -149,13 +148,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function groundArrayIndex(xPos) {
-        dif = xPos - groundarr[0].AbsoluteX;
+        dif = xPos - groundArr[0].AbsoluteX;
         index = Math.floor(dif/100);
         return index;
     }
 
     function groundArrayIndex(character) {
-        dif = character.AbsoluteX - groundarr[0].AbsoluteX;
+        dif = character.AbsoluteX - groundArr[0].AbsoluteX;
         index = Math.floor(dif/100);
         return index;
     }
@@ -181,8 +180,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     createGround(0, 0, 100, 150);
     updateGroundArr();
+
     //Character jump motion
-    character.y = 150;
+    gravity();
+    character.y = groundArr[groundArrayIndex(character)].height;
     jumpCount = 0;
     function jump() {
         character.y += 15;
