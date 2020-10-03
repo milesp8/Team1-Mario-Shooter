@@ -1,6 +1,5 @@
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("true")
     var enemyArr = [];
     var projArr = [[], []];
     var groundArr = [];
@@ -14,7 +13,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const tickSpeed = 30;
     const playerSpeed = 10;
     const ShootingTick =300;
-    groundHeights = [20, 100, 200, 300];
+
+    const PIT = 20;
+    const LOW = 100;
+    const MEDIUM = 200;
+    const HIGH = 300;
+    groundHeights = [PIT, LOW, MEDIUM, HIGH];
+
+
+    currentTerrainCounter = 0;
+    const FLAT = 0;
+    const BIGHILLUP = 1;
+    const FLATBIGHILL = 2;
+    const SMALLHILL = 3;
+    const SPIKES = 4;
+    const BIGHILLDOWN = 5;
+    terrainTypes = [FLAT, BIGHILLUP, FLATBIGHILL, SMALLHILL, SPIKES, BIGHILLDOWN];
+    currentTerrainType = terrainTypes[FLAT];
 
     // groundTop = 0;
 
@@ -33,17 +48,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
     var enemyArr = [];
     var projArr = [];
+    var controller = new Object();
 
     var character = new Object();
     character.element = "character";
     character.x = 0;
     character.y = 0
-    character.width = 30;
+    character.width = 40;
     character.height = 50;
     character.AbsoluteX = 0;
     character.AbsoluteLeft = 0;
-    console.log(character.AbsoluteX);
-    console.log(character.AbsoluteLeft)
+
+    //key press constants mapping
+    const SPACE_KEY = 32; //shooting key.
+    const UP_KEY = 87; //double press jump key
+    const RIGHT_KEY = 68; //change direction key 
+    const DOWN_KEY = 83; //change direction key
+    const LEFT_KEY = 65; //Change dir key
+
+    //var gravity = 0.8  //can be used for alternative jumping function
+    var isJumping = false;
+    var movingTimeout = -1;
+    var frames = 60;
+    var shootingTimeout = -1;
+
+    //creates test enemies
+    createEnemy(3, 500, 150, 20, 100);
+    createEnemy(2, 800, 175, 60, 50);
+
+    createGround(0, 0, GROUND_WIDTH, LOW);
+    updateGroundArr();
+
     updateCharacter();
 
     function gravity() {
@@ -82,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (direction == -1) {
             $('#' + proj.element).css(({ transform: "scaleX(-1)" }));
         }
-        projArr.push(proj, direction);
+        projArr.push(proj);
         if (projArr.length > 10) {
             $("#" + projArr.shift().element).parent().remove()
         }
@@ -106,11 +141,155 @@ document.addEventListener('DOMContentLoaded', () => {
     function createGroundAuto(width) {
         var ground = new Object();
         ground.element = "ground" + Math.floor(Math.random() * 100000);
-        ground.x = groundArr[groundArr.length - 1].x + 100;
+        ground.x = groundArr[groundArr.length - 1].x + GROUND_WIDTH;
         ground.AbsoluteX = groundArr[groundArr.length - 1].AbsoluteX + 100;
         ground.y = 0;
         ground.width = width;
-        ground.height = groundHeights[Math.floor(Math.random() * groundHeights.length)];
+        console.log(currentTerrainCounter, currentTerrainType)
+        switch (currentTerrainType) {
+            case FLAT:
+                if (currentTerrainCounter < 3) {
+                    currentTerrainCounter++;
+                    ground.height = LOW;
+                } else {
+                    currentTerrainType = terrainTypes[Math.floor(Math.random() * (terrainTypes.length - 1))];
+                    currentTerrainCounter = 1;
+                    switch (currentTerrainType) {
+                        case FLAT:
+                            ground.height = LOW;
+                            break;
+                        case BIGHILLUP:
+                            ground.height = MEDIUM;
+                            break;
+                        case FLATBIGHILL:
+                            ground.height = HIGH;
+                            break;
+                        case SMALLHILL:
+                            ground.height = MEDIUM;
+                            break;
+                        case SPIKES:
+                            ground.height = PIT;
+                            break;
+                        default:
+                            console.log("SOMETHING IS WRONG");
+                    }
+                }
+                break;
+            case BIGHILLUP:
+                if (currentTerrainCounter < 3) {
+                    goUp = Math.floor(Math.random() * 2);
+                    if (goUp == 1) {
+                        ground.height = HIGH;
+                        currentTerrainCounter = 1;
+                        currentTerrainType = BIGHILLDOWN;
+                    } else {
+                        ground.height = MEDIUM;
+                        currentTerrainCounter++;
+                    }
+                } else {
+                    ground.height = HIGH;
+                    currentTerrainCounter = 1;
+                    currentTerrainType = BIGHILLDOWN;
+                }
+                break;
+            case BIGHILLDOWN:
+                if (groundArr[groundArr.length - 1].height == HIGH) {
+                    if (currentTerrainCounter < 3) {
+                        ground.height = HIGH;
+                        currentTerrainCounter++;
+                    } else if (currentTerrainCounter < 5) {
+                        goDown = Math.floor(Math.random() * 2);
+                        if (goDown == 1) {
+                            ground.height = MEDIUM;
+                            currentTerrainCounter = 1;
+                        } else {
+                            ground.height = HIGH;
+                            currentTerrainCounter++;
+                        }
+                    } else {
+                        ground.height = MEDIUM;
+                        currentTerrainCounter = 1;
+                    }
+                } else {
+                    if (currentTerrainCounter < 3) {
+                        goDown = Math.floor(Math.random() * 2);
+                        if (goDown == 1) {
+                            ground.height = LOW;
+                            currentTerrainCounter = 1;
+                            currentTerrainType = FLAT;
+                        } else {
+                            ground.height = MEDIUM;
+                            currentTerrainCounter++;
+                        }
+                    } else {
+                        ground.height = LOW;
+                        currentTerrainCounter = 1;
+                        currentTerrainType = FLAT;
+                    }
+                }
+                break;
+            case FLATBIGHILL:
+                if (currentTerrainCounter < 3) {
+                    ground.height = HIGH;
+                    currentTerrainCounter++;
+                } else if (currentTerrainCounter < 5) {
+                    goDown = Math.floor(Math.random() * 2);
+                    if (goDown == 1) {
+                        ground.height = LOW;
+                        currentTerrainCounter = 1;
+                        currentTerrainType = FLAT;
+                    } else {
+                        ground.height = HIGH;
+                        currentTerrainCounter++;
+                    }
+                } else {
+                    ground.height = LOW;
+                    currentTerrainCounter = 1;
+                    currentTerrainType = FLAT;
+                }
+                break;
+            case SMALLHILL:
+                if (currentTerrainCounter < 3) {
+                    ground.height = MEDIUM;
+                    currentTerrainCounter++;
+                } else if (currentTerrainCounter < 5) {
+                    goDown = Math.floor(Math.random() * 2);
+                    if (goDown == 1) {
+                        ground.height = LOW;
+                        currentTerrainCounter = 1;
+                        currentTerrainType = FLAT;
+                    } else {
+                        ground.height = MEDIUM;
+                        currentTerrainCounter++;
+                    }
+                } else {
+                    ground.height = LOW;
+                    currentTerrainCounter = 1;
+                    currentTerrainType = FLAT;
+                }
+                break;
+            case SPIKES:
+                console.log("SPIKES");
+                if (currentTerrainCounter < 2) {
+                    goUp = Math.floor(Math.random() * 2);
+                    if (goUp == 1) {
+                        ground.height = LOW;
+                        currentTerrainCounter = 1;
+                        currentTerrainType = FLAT;
+                    } else {
+                        ground.height = PIT;
+                        currentTerrainCounter++;
+                    }
+                } else {
+                    ground.height = LOW;
+                    currentTerrainCounter = 1;
+                    currentTerrainType = FLAT;
+                }
+                break;
+
+        }
+        console.log(ground.height, currentTerrainCounter, currentTerrainType)
+        //ground.height = groundHeights[Math.floor(Math.random() * groundHeights.length)];
         $("ul.groundList").append('<li><div class=ground id=' + ground.element + '></div></li>')
         $('#' + ground.element).css(({ bottom: ground.y, left: ground.x, width: width + 'px', height: ground.height + 'px' }));
         groundArr.push(ground)
@@ -131,9 +310,8 @@ document.addEventListener('DOMContentLoaded', () => {
             $("#" + groundArr.shift().element).parent().remove()
         }
         while (groundArr.length < 25) {
-            createGroundAuto(100);
+            createGroundAuto(GROUND_WIDTH);
         }
-        console.log(character.AbsoluteLeft, groundArr[0].AbsoluteX)
     }
 
     function updateEnemies() {
@@ -144,51 +322,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateProj() {
         projArr.forEach(e => {
-            e.x += (projSpeed + isMoving) * e.dir;
-            $('#' + e.element).css('left', e.x + 'px');
-            if (e.x > window.innerWidth || e.x <= 0) {
+
+            nextBulletLocation = e.x + (1) * e.dir;  // future bullet location
+            nextGroundIndex = groundArr.findIndex((element) => element.x > nextBulletLocation)  // find index of ground at that future bullet index
+            nextGroundHeight = 0
+            
+            if (nextGroundIndex > -1){
+                nextGroundHeight = (groundArr[nextGroundIndex].height);
+            }
+
+            if (e.y > nextGroundHeight) {  // if bullet height is greater than the ground heihgt
+
+                e.x += (projSpeed + isMoving) * e.dir;
+                $('#' + e.element).css('left', e.x + 'px');
+                if (e.x > window.innerWidth || e.x <= 0) {
+                    $("#" + projArr.shift().element).parent().remove();
+                }
+            }else {              
+                //$("#" + e.element).css('background-image', url(assets/Player/explosion.jpg));
                 $("#" + projArr.shift().element).parent().remove();
             }
         });
     }
 
     function groundArrayIndex2(xPos) {
-        console.log(xPos);
         dif = xPos - groundArr[0].AbsoluteX;
-        console.log(dif);
-        index = Math.floor(dif / 100);
-        console.log(index);
+        index = Math.floor(dif / GROUND_WIDTH);
         return index;
     }
 
     function groundArrayIndex(character) {
         dif = character.AbsoluteX - groundArr[0].AbsoluteX;
-        index = Math.floor(dif / 100);
+        index = Math.floor(dif / GROUND_WIDTH);
         return index;
     }
-
-    var controller = new Object();
-
-    const SPACE_KEY = 32; //shooting key.
-    const UP_KEY = 87; //double press jump key
-    const RIGHT_KEY = 68; //change direction key 
-    const DOWN_KEY = 83; //change direction key
-    const LEFT_KEY = 65; //Change dir key
-
-
-
-    //var gravity = 0.8  //can be used for alternative jumping function
-    var isJumping = false;
-    var movingTimeout = -1;
-    var frames = 60;
-    var shootingTimeout = -1;
-
-    //creates test enemies
-    createEnemy(3, 500, 150, 20, 100);
-    createEnemy(2, 800, 175, 60, 50);
-
-    createGround(0, 0, 100, 100);
-    updateGroundArr();
 
     //Character jump motion
     gravity();
@@ -246,7 +413,6 @@ document.addEventListener('DOMContentLoaded', () => {
         $("#character").css(({ transform: "scaleX(-1)" }));
         if (character.AbsoluteX > character.AbsoluteLeft) {
             if (character.y >= groundArr[groundArrayIndex2(character.AbsoluteX - playerSpeed)].height) {
-                console.log("left1");
                 if (character.AbsoluteX <= character.AbsoluteLeft + 400) {
                     character.AbsoluteX -= playerSpeed;
                     character.x -= playerSpeed;
