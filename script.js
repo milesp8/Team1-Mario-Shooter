@@ -20,8 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
     groundHeights = [PIT, LOW, MEDIUM, HIGH];
 
 
-
-
     currentTerrainCounter = 0;
     const FLAT = 0;
     const BIGHILLUP = 1;
@@ -49,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     var enemyArr = [];
     var projArr = [];
+    var controller = new Object();
 
     var character = new Object();
     character.element = "character";
@@ -58,6 +57,27 @@ document.addEventListener('DOMContentLoaded', () => {
     character.height = 50;
     character.AbsoluteX = 0;
     character.AbsoluteLeft = 0;
+
+    //key press constants mapping
+    const SPACE_KEY = 32; //shooting key.
+    const UP_KEY = 87; //double press jump key
+    const RIGHT_KEY = 68; //change direction key 
+    const DOWN_KEY = 83; //change direction key
+    const LEFT_KEY = 65; //Change dir key
+
+    //var gravity = 0.8  //can be used for alternative jumping function
+    var isJumping = false;
+    var movingTimeout = -1;
+    var frames = 60;
+    var shootingTimeout = -1;
+
+    //creates test enemies
+    createEnemy(3, 500, 150, 20, 100);
+    createEnemy(2, 800, 175, 60, 50);
+
+    createGround(0, 0, GROUND_WIDTH, LOW);
+    updateGroundArr();
+
     updateCharacter();
 
     function gravity() {
@@ -96,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (direction == -1) {
             $('#' + proj.element).css(({ transform: "scaleX(-1)" }));
         }
-        projArr.push(proj, direction);
+        projArr.push(proj);
         if (projArr.length > 10) {
             $("#" + projArr.shift().element).parent().remove()
         }
@@ -301,9 +321,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateProj() {
         projArr.forEach(e => {
-            e.x += (projSpeed + isMoving) * e.dir;
-            $('#' + e.element).css('left', e.x + 'px');
-            if (e.x > window.innerWidth || e.x <= 0) {
+
+            nextBulletLocation = e.x + (1) * e.dir;  // future bullet location
+            nextGroundIndex = groundArr.findIndex((element) => element.x > nextBulletLocation)  // find index of ground at that future bullet index
+            nextGroundHeight = 0
+            
+            if (nextGroundIndex > -1){
+                nextGroundHeight = (groundArr[nextGroundIndex].height);
+            }
+
+            if (e.y > nextGroundHeight) {  // if bullet height is greater than the ground heihgt
+
+                e.x += (projSpeed + isMoving) * e.dir;
+                $('#' + e.element).css('left', e.x + 'px');
+                if (e.x > window.innerWidth || e.x <= 0) {
+                    $("#" + projArr.shift().element).parent().remove();
+                }
+            }else {              
+                //$("#" + e.element).css('background-image', url(assets/Player/explosion.jpg));
                 $("#" + projArr.shift().element).parent().remove();
             }
         });
@@ -320,29 +355,6 @@ document.addEventListener('DOMContentLoaded', () => {
         index = Math.floor(dif / GROUND_WIDTH);
         return index;
     }
-
-    var controller = new Object();
-
-    const SPACE_KEY = 32; //shooting key.
-    const UP_KEY = 87; //double press jump key
-    const RIGHT_KEY = 68; //change direction key 
-    const DOWN_KEY = 83; //change direction key
-    const LEFT_KEY = 65; //Change dir key
-
-
-
-    //var gravity = 0.8  //can be used for alternative jumping function
-    var isJumping = false;
-    var movingTimeout = -1;
-    var frames = 60;
-    var shootingTimeout = -1;
-
-    //creates test enemies
-    createEnemy(3, 500, 150, 20, 100);
-    createEnemy(2, 800, 175, 60, 50);
-
-    createGround(0, 0, GROUND_WIDTH, LOW);
-    updateGroundArr();
 
     //Character jump motion
     gravity();
