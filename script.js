@@ -329,8 +329,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateProj() {
         projArr.forEach(e => {
-
-            nextBulletLocation = e.x + (1) * e.dir;  // future bullet location
+            if(e.dir == -1){
+            nextBulletLocation = e.x + (2 * projSpeed * e.dir);  // future bullet location
+            }
+            else{
+                nextBulletLocation = e.x + (e.dir - projSpeed);  // future bullet location
+            }
             nextGroundIndex = groundArr.findIndex((element) => element.x > nextBulletLocation)  // find index of ground at that future bullet index
             nextGroundHeight = 0
             
