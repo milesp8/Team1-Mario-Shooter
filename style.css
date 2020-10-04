@@ -21,8 +21,8 @@ body {
 
 
 .character {
-    background-image: url(assets/Player/mariosmall.png);
-    background-color: red;
+    background-image: url(assets/Player/mario.png);
+    background-color: rgb(0, 0, 0, 0);
     height: 50px;
     width: 30px;
     position:absolute;
@@ -48,6 +48,7 @@ body {
 }
 
 .ground {
+    background-image: url(assets/Terrain/dirt.png);
     background-color: brown;
     width:100px;
     height: 150px;
