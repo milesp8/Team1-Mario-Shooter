@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
     character.height = 50;
     character.AbsoluteX = 0;
     character.AbsoluteLeft = 0;
+    character.acceleration = 0;
 
     //key press constants mapping
     const SPACE_KEY = 32; //shooting key.
@@ -362,13 +363,18 @@ document.addEventListener('DOMContentLoaded', () => {
     character.y = Math.max(groundArr[groundArrayIndex(character)].height, groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1)].height);
     jumpCount = 0;
     function jump() {
-        character.y += 15;
+        character.y += 12 - character.acceleration;
         jumpCount++;
+        character.acceleration += .25
         $(".character").css(({ bottom: character.y + 'px' }))
-        if (jumpCount < 20) {
-            jumpingTimeout = setTimeout(jump, 1000 / frames);
+        if (jumpCount < 200 && character.y >= Math.max(groundArr[groundArrayIndex(character)].height, groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1)].height)) {
+            jumpingTimeout = setTimeout(jump, 500 / frames);
         }
-        else { jumpCount = 0 }
+        else { 
+            jumpCount = 0;
+            character.y = Math.max(groundArr[groundArrayIndex(character)].height, groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1)].height);
+            character.acceleration = 0;
+        }
     }
 
     //Right movement
