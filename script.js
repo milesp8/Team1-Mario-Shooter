@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
     character.element = "character";
     character.x = 0;
     character.y = 0
-    character.width = 40;
+    character.width = 30;
     character.height = 50;
     character.AbsoluteX = 0;
     character.AbsoluteLeft = 0;
@@ -377,7 +377,7 @@ document.addEventListener('DOMContentLoaded', () => {
         direction = 1
         $("#character").css(({ transform: "scaleX(1)" }));
 
-        if (character.y >=groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1 + playerSpeed)].height) {
+        if (character.y >=groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 10 + playerSpeed)].height) {
             if (character.AbsoluteX < character.AbsoluteLeft + 400) {
                 character.x += playerSpeed;
             } else {
