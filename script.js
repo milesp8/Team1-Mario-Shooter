@@ -8,7 +8,11 @@ document.addEventListener('DOMContentLoaded', () => {
     //$(".game-container").css(({height: window.innerHeight + 'px'}));
     var direction = 1  //direction of the character and projectile ( 1 = right, -1 = left)
     var isMoving = 0 //Tracks if the player is moving or not, 0 if still, 10 if moving
-    var jumpCount = 0;
+    var jumpCount = 0
+
+    var score = 0 //Tracks player score
+    const moveScore = 10
+    const killScore = 20
 
     const projSpeed = 40;
     const tickSpeed = 30;
@@ -304,6 +308,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return ground;
     }
 
+    function updateScore(increase){
+        score += increase;
+    }
+
     function updateCharacter() {
         $('#' + character.element).css('left', character.x + 'px');
     }
@@ -412,6 +420,7 @@ document.addEventListener('DOMContentLoaded', () => {
             character.AbsoluteX += playerSpeed;
             if (character.AbsoluteX == character.AbsoluteLeft + 400 + 20 * playerSpeed) {
                 character.AbsoluteLeft += playerSpeed;
+                updateScore(moveScore);
             }
         }
         movingTimeout = setTimeout(moveRight, 1000 / frames);
