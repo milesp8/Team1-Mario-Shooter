@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //$(".game-container").css(({height: window.innerHeight + 'px'}));
     var direction = 1  //direction of the character and projectile ( 1 = right, -1 = left)
     var isMoving = 0 //Tracks if the player is moving or not, 0 if still, 10 if moving
+    var jumpCount = 0;
 
     const projSpeed = 40;
     const tickSpeed = 30;
@@ -84,7 +85,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function gravity() {
         if (character.y > Math.max(groundArr[groundArrayIndex(character)].height, groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1)].height) && jumpCount == 0) {
-            character.y -= 20;
+            character.y -= (8 + character.acceleration);
+            character.acceleration+= .25;
+        }
+        else if(jumpCount == 0){
+            character.y = Math.max(groundArr[groundArrayIndex(character)].height, groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1)].height);
+            character.acceleration = 0;
         }
         $(".character").css(({ bottom: character.y + 'px' }))
         setTimeout(gravity, 1000 / frames);
