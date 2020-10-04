@@ -11,8 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
     var jumpCount = 0
 
     var score = 0 //Tracks player score
-    const moveScore = 10
-    const killScore = 20
+    const moveScore = 1
+    const killScore = 5
 
     const projSpeed = 40;
     const tickSpeed = 30;
@@ -310,6 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateScore(increase){
         score += increase;
+        document.getElementById('score').innerHTML = score;
     }
 
     function updateCharacter() {
