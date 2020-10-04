@@ -84,12 +84,13 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCharacter();
 
     function gravity() {
-        if (character.y > Math.max(groundArr[groundArrayIndex(character)].height, groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1)].height) && jumpCount == 0) {
+        let maxGroundHeight = Math.max(groundArr[groundArrayIndex(character)].height, groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1)].height);
+        if (character.y > maxGroundHeight && jumpCount == 0) {
             character.y -= (8 + character.acceleration);
             character.acceleration+= .25;
         }
         else if(jumpCount == 0){
-            character.y = Math.max(groundArr[groundArrayIndex(character)].height, groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1)].height);
+            character.y = maxGroundHeight;
             character.acceleration = 0;
         }
         $(".character").css(({ bottom: character.y + 'px' }))
@@ -370,19 +371,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //Character jump motion
     gravity();
-    character.y = Math.max(groundArr[groundArrayIndex(character)].height, groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1)].height);
-    jumpCount = 0;
     function jump() {
+        let maxGroundHeight = Math.max(groundArr[groundArrayIndex(character)].height, groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1)].height);
         character.y += 12 - character.acceleration;
         jumpCount++;
         character.acceleration += .25
         $(".character").css(({ bottom: character.y + 'px' }))
-        if (jumpCount < 200 && character.y >= Math.max(groundArr[groundArrayIndex(character)].height, groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1)].height)) {
+        if (jumpCount < 200 && character.y >= maxGroundHeight) {
             jumpingTimeout = setTimeout(jump, 500 / frames);
         }
         else { 
             jumpCount = 0;
-            character.y = Math.max(groundArr[groundArrayIndex(character)].height, groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1)].height);
+            character.y = maxGroundHeight;
             character.acceleration = 0;
         }
     }
