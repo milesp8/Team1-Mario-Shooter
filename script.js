@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const playerSpeed = 10;
     const ShootingTick = 300;
     const enemySpeed = 10;
+    const enemyHealth = 2;
 
     const spikeHealth = -1
     const spikeHeight = 30
@@ -96,8 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
     createGround(0, 0, GROUND_WIDTH, LOW);
     updateGroundArr();
 
-    createEnemy(3, 500, 500, groundArr[groundArrayIndex2(500)].height, 20, 100, 1);
-    createEnemy(2, 800, 800, groundArr[groundArrayIndex2(800)].height, 60, 50, 1);
+    createEnemy(enemyHealth, 500, 500, groundArr[groundArrayIndex2(500)].height, 20, 100, 1);
+    createEnemy(enemyHealth, 800, 800, groundArr[groundArrayIndex2(800)].height, 60, 50, 1);
 
     updateCharacter();
 
@@ -385,7 +386,7 @@ document.addEventListener('DOMContentLoaded', () => {
             $('#' + e.element).css('left', e.x + 'px');
         });
         if (enemyArr.length < minEnemies && groundArr[groundArr.length - 1].height != 20) {
-            createEnemy(3, groundArr[groundArr.length - 1].AbsoluteX, 0, groundArr[groundArr.length - 1].height, 60, 50, 1);
+            createEnemy(enemyHealth, groundArr[groundArr.length - 1].AbsoluteX, 0, groundArr[groundArr.length - 1].height, 60, 50, 1);
         }
     }
 
@@ -497,8 +498,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 updateScore(moveScore);
                 if (Math.floor(character.AbsoluteLeft/2000) > Math.floor((character.AbsoluteLeft - playerSpeed)/2000)) {
                     minEnemies++;
-                    console.log(minEnemies);
-                    console.log(enemyArr.length);
+                }
+                if (Math.floor(character.AbsoluteLeft/10000) > Math.floor((character.AbsoluteLeft - playerSpeed)/10000) && enemyHealth < 5) {
+                    enemyHealth++;
                 }
             }
         }
