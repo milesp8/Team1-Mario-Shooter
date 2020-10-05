@@ -5,6 +5,9 @@ body {
 }
 h3 {
     margin: 0;
+    position: relative;
+    left: 10px;
+    top: 10px;
 }
 
 .game-container {
