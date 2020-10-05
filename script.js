@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('playerHealth').innerHTML = playerHealth;
 
         //Create inital ground
-        createGroundAuto(GROUND_WIDTH);
+        createGround();
         updateGroundArr();
 
         //First call of gravity to calibrate character to ground level.
@@ -216,17 +216,17 @@ document.addEventListener('DOMContentLoaded', () => {
         return proj;
     }
 
-    function createGroundAuto(width) {
+    function createGround() {
         if (groundArr.length == 0) {
             var ground = new Object();
             ground.element = "ground" + Math.floor(Math.random() * 100000);
             ground.x = 0;
             ground.AbsoluteX = 0;
             ground.y = 0;
-            ground.width = width;
+            ground.width = GROUND_WIDTH;
             ground.height = LOW;
             $("ul.groundList").append('<li><div class=ground id=' + ground.element + '></div></li>')
-            $('#' + ground.element).css(({ bottom: ground.y, left: ground.x, width: width + 'px', height: ground.height + 'px' }));
+            $('#' + ground.element).css(({ bottom: ground.y, left: ground.x, width: ground.width + 'px', height: ground.height + 'px' }));
             groundArr.push(ground)
             return ground;
         } else {
@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ground.x = groundArr[groundArr.length - 1].x + GROUND_WIDTH;
             ground.AbsoluteX = groundArr[groundArr.length - 1].AbsoluteX + 100;
             ground.y = 0;
-            ground.width = width;
+            ground.width = GROUND_WIDTH;
             switch (currentTerrainType) {
                 case FLAT:
                     if (currentTerrainCounter < 3) {
@@ -380,7 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             }
             $("ul.groundList").append('<li><div class=ground id=' + ground.element + '></div></li>')
-            $('#' + ground.element).css(({ bottom: ground.y, left: ground.x, width: width + 'px', height: ground.height + 'px' }));
+            $('#' + ground.element).css(({ bottom: ground.y, left: ground.x, width: ground.width + 'px', height: ground.height + 'px' }));
             groundArr.push(ground)
             return ground;
         }
@@ -417,7 +417,7 @@ document.addEventListener('DOMContentLoaded', () => {
             $("#" + groundArr.shift().element).parent().remove()
         }
         while (groundArr.length < 25) {
-            createGroundAuto(GROUND_WIDTH);
+            createGround();
         }
     }
 
