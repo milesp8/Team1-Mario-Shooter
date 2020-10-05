@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
     createGround(0, 0, GROUND_WIDTH, LOW);
     updateGroundArr();
 
-    createEnemy(enemyHealth, 500, 500, groundArr[groundArrayIndex2(500)].height, 20, 100, 1);
+    createEnemy(enemyHealth, 500, 500, groundArr[groundArrayIndex2(500)].height, 60, 50, 1);
     createEnemy(enemyHealth, 800, 800, groundArr[groundArrayIndex2(800)].height, 60, 50, 1);
 
     updateCharacter();
