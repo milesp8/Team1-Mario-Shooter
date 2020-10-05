@@ -425,6 +425,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+    function checkBulletEnemyCollision(){
+        projArr.forEach(e => {
+            enemyArr.forEach(f => {
+                if ((e.x + e.width >= f.x && e.x + e.width <= f.x + f.width) && (e.y >= f.y && e.y <= f.y + f.height)){
+                    f.health = f.health - 1;
+                }
+            })
+        })
+    }
 
     function groundArrayIndex(character) {
         dif = character.AbsoluteX - groundArr[0].AbsoluteX;
