@@ -1,9 +1,43 @@
 
 document.addEventListener('DOMContentLoaded', () => {
-    var enemyArr = [];
-    var projArr = [[], []];
-    var groundArr = [];
-    var GROUND_WIDTH = 100;
+
+    //key press constants mapping
+    const SPACE_KEY = 32; //shooting key.
+    const UP_KEY = 87; //double press jump key
+    const RIGHT_KEY = 68; //change direction key 
+    const DOWN_KEY = 83; //change direction key
+    const LEFT_KEY = 65; //Change dir key
+
+    //game constants
+    const TICK_SPEED = 30;
+    const SHOOTING_DELAY = 300;
+
+    const GROUND_WIDTH = 100;
+    const SPIKE_HEIGHT = 30;
+    const SPIKE_HEALTH = -1;
+
+    const MOVE_SCORE = 1;
+    const KILL_SCORE = 5;
+
+    const PLAYER_SPEED = 10;
+    const ENEMY_SPEED = 10;
+    const PROJECTILE_SPEED = 40;
+
+    //constant arrays for terain generation
+    const PIT = 20;
+    const LOW = 100;
+    const MEDIUM = 200;
+    const HIGH = 300;
+    groundHeights = [PIT, LOW, MEDIUM, HIGH];
+
+    const FLAT = 0;
+    const BIGHILLUP = 1;
+    const FLATBIGHILL = 2;
+    const SMALLHILL = 3;
+    const SPIKES = 4;
+    const BIGHILLDOWN = 5;
+    terrainTypes = [FLAT, BIGHILLUP, FLATBIGHILL, SMALLHILL, SPIKES, BIGHILLDOWN];
+    
     //$(".game-container").css(({width: window.innerWidth + 'px'}));
     //$(".game-container").css(({height: window.innerHeight + 'px'}));
     var direction = 1  //direction of the character and projectile ( 1 = right, -1 = left)
@@ -12,38 +46,22 @@ document.addEventListener('DOMContentLoaded', () => {
     var playerHealth = 3;
     document.getElementById('playerHealth').innerHTML = playerHealth; //initialize playerHealth
 
+    //object arrays;
+    var groundArr = [];
+    var enemyArr = [];
+    var projArr = [[], []];
+    
     var score = 0 //Tracks player score
-    const moveScore = 1
-    const killScore = 5
     minEnemies = 4;
 
-    const projSpeed = 40;
-    const tickSpeed = 30;
-    const playerSpeed = 10;
-    const ShootingTick = 300;
-    const enemySpeed = 10;
     var enemyHealth = 2;
 
-    const spikeHealth = -1
-    const spikeHeight = 30
-    const tileWidth = 100
-
-    const PIT = 20;
-    const LOW = 100;
-    const MEDIUM = 200;
-    const HIGH = 300;
-    groundHeights = [PIT, LOW, MEDIUM, HIGH];
+    
     var enemyCounter = 0;
 
 
     currentTerrainCounter = 0;
-    const FLAT = 0;
-    const BIGHILLUP = 1;
-    const FLATBIGHILL = 2;
-    const SMALLHILL = 3;
-    const SPIKES = 4;
-    const BIGHILLDOWN = 5;
-    terrainTypes = [FLAT, BIGHILLUP, FLATBIGHILL, SMALLHILL, SPIKES, BIGHILLDOWN];
+    
     currentTerrainType = terrainTypes[FLAT];
 
     // groundTop = 0;
@@ -58,10 +76,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //startGame()
     //console.log(ground.style.bottom);
-    setInterval(updateProj, tickSpeed);//Lags the game quite a bit
-    setInterval(updateEnemies, tickSpeed);//Lags the game quite a bit
-    setInterval(checkPlayerCollision, tickSpeed);
-    setInterval(checkBulletEnemyCollision, tickSpeed);
+    setInterval(updateProj, TICK_SPEED);//Lags the game quite a bit
+    setInterval(updateEnemies, TICK_SPEED);//Lags the game quite a bit
+    setInterval(checkPlayerCollision, TICK_SPEED);
+    setInterval(checkBulletEnemyCollision, TICK_SPEED);
 
 
     var enemyArr = [];
@@ -78,12 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
     character.AbsoluteLeft = 0;
     character.acceleration = 0;
 
-    //key press constants mapping
-    const SPACE_KEY = 32; //shooting key.
-    const UP_KEY = 87; //double press jump key
-    const RIGHT_KEY = 68; //change direction key 
-    const DOWN_KEY = 83; //change direction key
-    const LEFT_KEY = 65; //Change dir key
+    
 
     //var gravity = 0.8  //can be used for alternative jumping function
     var isJumping = false;
@@ -293,7 +306,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 break;
             case SPIKES:
-                let spikeName = createEnemy(spikeHealth, ground.AbsoluteX - tileWidth - 20, 0, PIT, tileWidth + 40, spikeHeight, 0).element;
+                let spikeName = createEnemy(SPIKE_HEALTH, ground.AbsoluteX - GROUND_WIDTH - 20, 0, PIT, GROUND_WIDTH + 40, SPIKE_HEIGHT, 0).element;
                 $('#'+spikeName).addClass("spike");
                 if (currentTerrainCounter < 2) {
                     goUp = Math.floor(Math.random() * 2);
@@ -363,10 +376,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateEnemies() {
         enemyArr.forEach(e => {
             if (e.AbsoluteX + e.width <= (character.AbsoluteLeft) || e.health == 0) { //Removes Enemies if further than absolute left
+                if (e.health == 0) {
+                    updateScore(KILL_SCORE);
+                }
                 $("#" + e.element).parent().remove();
                 enemyArr = enemyArr.filter(item => item.element !== e.element)
             }
-            nextEnemyLocation = e.AbsoluteX + (enemySpeed * e.dir);
+            nextEnemyLocation = e.AbsoluteX + (ENEMY_SPEED * e.dir);
             if (e.dir == 1) {
                 nextEnemyLocation += e.width - 1;
             }
@@ -376,8 +392,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 nextGroundHeight = (groundArr[nextGroundIndex].height);
             }
             if (nextGroundIndex < 25 && e.y == nextGroundHeight) { //CHANGE TO == AFTER GENERATION 
-                e.AbsoluteX += enemySpeed * e.dir; //Handles Movement of enemies
-                e.x += enemySpeed * e.dir;
+                e.AbsoluteX += ENEMY_SPEED * e.dir; //Handles Movement of enemies
+                e.x += ENEMY_SPEED * e.dir;
             }
             else {
                 e.dir = e.dir * -1;
@@ -393,10 +409,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateProj() {
         projArr.forEach(e => {
             if (e.dir == -1) { //If moving to the left
-                nextBulletLocation = e.x + (2 * projSpeed * e.dir);  // future bullet location
+                nextBulletLocation = e.x + (2 * PROJECTILE_SPEED * e.dir);  // future bullet location
             }
             else { //If moving right
-                nextBulletLocation = e.x + (e.dir - projSpeed);  // future bullet location
+                nextBulletLocation = e.x + (e.dir - PROJECTILE_SPEED);  // future bullet location
             }
             nextGroundIndex = groundArr.findIndex((element) => element.x > nextBulletLocation)  // find index of ground at that future bullet index
             nextGroundHeight = 0
@@ -407,7 +423,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (e.y > nextGroundHeight) {  // if bullet height is greater than the ground heihgt
 
-                e.x += (projSpeed + isMoving) * e.dir;
+                e.x += (PROJECTILE_SPEED + isMoving) * e.dir;
                 $('#' + e.element).css('left', e.x + 'px');
                 if (e.x > groundArr[groundArr.length - 1].x + GROUND_WIDTH || e.x <= character.AbsoluteLeft - e.width) {
                     $("#" + e.element).parent().remove();
@@ -478,30 +494,30 @@ document.addEventListener('DOMContentLoaded', () => {
         direction = 1
         $("#character").css(({ transform: "scaleX(1)" }));
 
-        if (character.y >= groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 10 + playerSpeed)].height) {
+        if (character.y >= groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 10 + PLAYER_SPEED)].height) {
             if (character.AbsoluteX < character.AbsoluteLeft + 400) {
-                character.x += playerSpeed;
+                character.x += PLAYER_SPEED;
             } else {
 
                 groundArr.forEach(e => {
-                    e.x -= playerSpeed;
+                    e.x -= PLAYER_SPEED;
                 });
                 // $('div.ground').css('left', (parseInt($('div.ground').css('left')) - 20) + 'px');
                 enemyArr.forEach(e => {
-                    e.x -= playerSpeed;
+                    e.x -= PLAYER_SPEED;
                 });
                 projArr.forEach(e => {
-                    e.x -= playerSpeed;
+                    e.x -= PLAYER_SPEED;
                 });
             }
-            character.AbsoluteX += playerSpeed;
-            if (character.AbsoluteX == character.AbsoluteLeft + 400 + 20 * playerSpeed) {
-                character.AbsoluteLeft += playerSpeed;
-                updateScore(moveScore);
-                if (Math.floor(character.AbsoluteLeft/2000) > Math.floor((character.AbsoluteLeft - playerSpeed)/2000)) {
+            character.AbsoluteX += PLAYER_SPEED;
+            if (character.AbsoluteX == character.AbsoluteLeft + 400 + 20 * PLAYER_SPEED) {
+                character.AbsoluteLeft += PLAYER_SPEED;
+                updateScore(MOVE_SCORE);
+                if (Math.floor(character.AbsoluteLeft/2000) > Math.floor((character.AbsoluteLeft - PLAYER_SPEED)/2000)) {
                     minEnemies++;
                 }
-                if (Math.floor(character.AbsoluteLeft/10000) > Math.floor((character.AbsoluteLeft - playerSpeed)/10000) && enemyHealth < 5) {
+                if (Math.floor(character.AbsoluteLeft/10000) > Math.floor((character.AbsoluteLeft - PLAYER_SPEED)/10000) && enemyHealth < 5) {
                     enemyHealth++;
                 }
             }
@@ -520,21 +536,21 @@ document.addEventListener('DOMContentLoaded', () => {
         direction = -1
         $("#character").css(({ transform: "scaleX(-1)" }));
         if (character.AbsoluteX > character.AbsoluteLeft) {
-            if (character.y >= groundArr[groundArrayIndex2(character.AbsoluteX - playerSpeed)].height) {
+            if (character.y >= groundArr[groundArrayIndex2(character.AbsoluteX - PLAYER_SPEED)].height) {
                 if (character.AbsoluteX <= character.AbsoluteLeft + 400) {
-                    character.AbsoluteX -= playerSpeed;
-                    character.x -= playerSpeed;
+                    character.AbsoluteX -= PLAYER_SPEED;
+                    character.x -= PLAYER_SPEED;
                 } else {
-                    character.AbsoluteX -= playerSpeed;
+                    character.AbsoluteX -= PLAYER_SPEED;
                     groundArr.forEach(e => {
-                        e.x += playerSpeed;
+                        e.x += PLAYER_SPEED;
                     });
                     //$('div.ground').css('left', (parseInt($('div.ground').css('left')) + 20) + 'px');
                     enemyArr.forEach(e => {
-                        e.x += playerSpeed;
+                        e.x += PLAYER_SPEED;
                     });
                     projArr.forEach(e => {
-                        e.x += playerSpeed
+                        e.x += PLAYER_SPEED
                     });
                 }
             }
@@ -553,7 +569,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let laserID
         let currLaserID = 0;
         createProjectile(character.x + character.width / 3, character.y + 20);
-        shootingTimeout = setTimeout(shoot, ShootingTick);
+        shootingTimeout = setTimeout(shoot, SHOOTING_DELAY);
 
         /*xPos=character.style.left; ------> we should write function in terms of characters curr position pixel. 
         createProjectile(character.style.left+450+"px",character.style.bottom+790+'px');*/
