@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const projSpeed = 40;
     const tickSpeed = 30;
     const playerSpeed = 10;
-    const ShootingTick =300;
+    const ShootingTick = 300;
     const enemySpeed = 10;
 
     const spikeHealth = -1
@@ -99,16 +99,16 @@ document.addEventListener('DOMContentLoaded', () => {
         let maxGroundHeight = Math.max(groundArr[groundArrayIndex(character)].height, groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1)].height);
         if (character.y > maxGroundHeight && jumpCount == 0) {
             character.y -= (8 + character.acceleration);
-            character.acceleration+= .25;
+            character.acceleration += .25;
         }
-        else if(jumpCount == 0){
+        else if (jumpCount == 0) {
             character.y = maxGroundHeight;
             character.acceleration = 0;
         }
         $(".character").css(({ bottom: character.y + 'px' }))
         setTimeout(gravity, 1000 / frames);
     }
-    function createEnemy(health, x, y, width, height,dir) {
+    function createEnemy(health, x, y, width, height, dir) {
         var enemy = new Object();
         enemy.element = "enemy" + Math.floor(Math.random() * 100000);
         enemy.health = health;
@@ -290,7 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 break;
             case SPIKES:
-                createEnemy(spikeHealth, ground.x - tileWidth -20, PIT, tileWidth + 40, spikeHeight, 0);
+                createEnemy(spikeHealth, ground.x - tileWidth - 20, PIT, tileWidth + 40, spikeHeight, 0);
                 console.log("SPIKES");
                 if (currentTerrainCounter < 2) {
                     goUp = Math.floor(Math.random() * 2);
@@ -317,12 +317,12 @@ document.addEventListener('DOMContentLoaded', () => {
         groundArr.push(ground)
         return ground;
     }
-    function updatePlayerHealth(change){
+    function updatePlayerHealth(change) {
         playerHealth += change;
         document.getElementById('playerHealth').innerHTML = playerHealth;
     }
 
-    function updateScore(increase){
+    function updateScore(increase) {
         score += increase;
         document.getElementById('score').innerHTML = score;
     }
@@ -347,43 +347,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateEnemies() {
         enemyArr.forEach(e => {
-            if (e.x + e.width <= 0) { //Removes Enemies if further than 0 on left
+            if (e.x + e.width <= (-2 * GROUND_WIDTH)) { //Removes Enemies if further than absolute left
                 $("#" + e.element).parent().remove();
                 enemyArr = enemyArr.filter(item => item.element !== e.element)
             }
-            if(e.dir == -1){
+            if (e.dir == -1) {
                 nextEnemyLocation = e.x + (2 * enemySpeed * e.dir);
-            }else{
+            } else {
                 nextEnemyLocation = e.x + (e.dir - enemySpeed);
             }
             nextGroundIndex = groundArr.findIndex((element) => element.x > nextEnemyLocation);
             nextGroundHeight = 0;
-            if (nextGroundIndex > -1){
+            if (nextGroundIndex > -1) {
                 nextGroundHeight = (groundArr[nextGroundIndex].height);
             }
-            if(e.y == nextGroundHeight){ //CHANGE TO == AFTER GENERATION 
+            if (e.y == nextGroundHeight) { //CHANGE TO == AFTER GENERATION 
                 e.x += enemySpeed * e.dir; //Handles Movement of enemies
             }
-            else{
+            else {
                 e.dir = e.dir * -1;
             }
-            
-            $('#' + e.element).css('left', e.x + 'px'); 
+
+            $('#' + e.element).css('left', e.x + 'px');
         });
     }
 
     function updateProj() {
         projArr.forEach(e => {
-            if(e.dir == -1){ //If moving to the left
-            nextBulletLocation = e.x + (2 * projSpeed * e.dir);  // future bullet location
-            } 
-            else{ //If moving right
+            if (e.dir == -1) { //If moving to the left
+                nextBulletLocation = e.x + (2 * projSpeed * e.dir);  // future bullet location
+            }
+            else { //If moving right
                 nextBulletLocation = e.x + (e.dir - projSpeed);  // future bullet location
             }
             nextGroundIndex = groundArr.findIndex((element) => element.x > nextBulletLocation)  // find index of ground at that future bullet index
             nextGroundHeight = 0
-            
-            if (nextGroundIndex > -1){
+
+            if (nextGroundIndex > -1) {
                 nextGroundHeight = (groundArr[nextGroundIndex].height);
             }
 
@@ -395,7 +395,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     $("#" + e.element).parent().remove();
                     projArr = projArr.filter(item => item.element !== e.element)
                 }
-            }else {              
+            } else {
                 //$("#" + e.element).css('background-image', url(assets/Player/explosion.jpg));
                 $("#" + e.element).parent().remove();
                 projArr = projArr.filter(item => item.element !== e.element)
@@ -426,7 +426,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (jumpCount < 200 && character.y >= maxGroundHeight) {
             jumpingTimeout = setTimeout(jump, 500 / frames);
         }
-        else { 
+        else {
             jumpCount = 0;
             character.y = maxGroundHeight;
             character.acceleration = 0;
@@ -439,7 +439,7 @@ document.addEventListener('DOMContentLoaded', () => {
         direction = 1
         $("#character").css(({ transform: "scaleX(1)" }));
 
-        if (character.y >=groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 10 + playerSpeed)].height) {
+        if (character.y >= groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 10 + playerSpeed)].height) {
             if (character.AbsoluteX < character.AbsoluteLeft + 400) {
                 character.x += playerSpeed;
             } else {
@@ -546,7 +546,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             case SPACE_KEY:
                 if (shootingTimeout === -1) {
-                    shoot();}
+                    shoot();
+                }
                 break;
 
             default: return;
@@ -578,7 +579,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             case DOWN_KEY:  //down key
                 break;
-                
+
             case SPACE_KEY:
                 clearTimeout(shootingTimeout);
                 shootingTimeout = -1;
