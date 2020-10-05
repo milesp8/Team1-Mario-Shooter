@@ -86,6 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     var movingTimeout = -1;
     var frames = 60;
     var shootingTimeout = -1;
+    var dmgCooldown = false; // tracks if there has been dmg 
 
     //creates test enemies
     createEnemy(3, 500, 150, 20, 100, 1);
@@ -412,7 +413,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function checkPlayerCollision(){ //Check if player touches an enemy
         enemyArr.forEach(e => {
-            if((character.x > e.x && character.x + character.width < e.x + e.width) && (character.y < e.y + e.height && character.y >= e.y)){
+            if((character.x > e.x && character.x + character.width < e.x + e.width) && (character.y < e.y + e.height && character.y >= e.y) && dmgCooldown == false){
                 updatePlayerHealth(-1);
             }
         });
