@@ -363,11 +363,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.x += (projSpeed + isMoving) * e.dir;
                 $('#' + e.element).css('left', e.x + 'px');
                 if (e.x > window.innerWidth || e.x <= 0) {
-                    $("#" + projArr.shift().element).parent().remove();
+                    $("#" + e.element).parent().remove();
                 }
             }else {              
                 //$("#" + e.element).css('background-image', url(assets/Player/explosion.jpg));
-                $("#" + projArr.shift().element).parent().remove();
+                $("#" + e.element).parent().remove();
             }
         });
     }
