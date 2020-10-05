@@ -128,9 +128,6 @@ document.addEventListener('DOMContentLoaded', () => {
         $("ul.enemyList").append('<li><div class=enemy id=' + enemy.element + '></div></li>')
         $('#' + enemy.element).css(({ bottom: y + 'px', left: enemy.x + 'px', width: width + 'px', height: height + 'px' }));
         enemyArr.push(enemy)
-        if (enemyArr.length > 10) {
-            $("#" + enemyArr.shift().element).parent().remove();
-        }
         return enemy;
     }
     function createProjectile(x, y) {
