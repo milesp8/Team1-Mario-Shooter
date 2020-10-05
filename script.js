@@ -4,8 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //Key press constants mapping
     const SPACE_KEY = 32; //shooting key.
     const UP_KEY = 87; //double press jump key
-    const RIGHT_KEY = 68; //change direction key 
-    const DOWN_KEY = 83; //change direction key
+    const RIGHT_KEY = 68; //change direction key
     const LEFT_KEY = 65; //Change dir key
 
     //Game constants
