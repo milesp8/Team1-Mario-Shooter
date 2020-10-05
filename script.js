@@ -351,7 +351,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateEnemies() {
         enemyArr.forEach(e => {
-            if (e.x + e.width <= (-2 * GROUND_WIDTH)) { //Removes Enemies if further than absolute left
+            if (e.x + e.width <= (-2 * GROUND_WIDTH) || e.health == 0) { //Removes Enemies if further than absolute left or at 0 health
                 $("#" + e.element).parent().remove();
                 enemyArr = enemyArr.filter(item => item.element !== e.element)
             }
