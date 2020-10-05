@@ -3,6 +3,9 @@ body {
     padding: 0;
     overflow: hidden; /* Hide scrollbars */
 }
+h3 {
+    margin: 0;
+}
 
 .game-container {
     width: 100%;
