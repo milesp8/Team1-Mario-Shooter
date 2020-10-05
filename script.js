@@ -316,14 +316,17 @@ document.addEventListener('DOMContentLoaded', () => {
         groundArr.push(ground)
         return ground;
     }
+
+    setInterval(() => {
+        if(dmgCooldown)
+            $('.character').fadeTo(100, 0.3, function() { $(this).fadeTo(100, 1.0); });
+        else{$('.character').stop(stopAll).fadeTo(0, 1.0)}
+    }, 200);
+    
     function updatePlayerHealth(change) {
         playerHealth += change;
         document.getElementById('playerHealth').innerHTML = playerHealth;
         dmgCooldown = true;
-        setInterval(() => {
-            if(dmgCooldown)
-                $('.character').fadeTo(100, 0.3, function() { $(this).fadeTo(100, 1.0); });
-        }, 200);
         
         setTimeout(() => {
             dmgCooldown = false;
