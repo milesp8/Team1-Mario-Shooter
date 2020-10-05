@@ -433,6 +433,8 @@ document.addEventListener('DOMContentLoaded', () => {
             enemyArr.forEach(f => {
                 if ((e.x + e.width >= f.x && e.x + e.width <= f.x + f.width) && ((e.y >= f.y && e.y <= f.y + f.height) || (e.y + e.height >= f.y && e.y + e.height <= f.y + f.height ) )){
                     f.health = f.health - 1;
+                    $("#" + e.element).parent().remove();
+                    projArr = projArr.filter(item => item.element !== e.element)
                 }
             })
         })
