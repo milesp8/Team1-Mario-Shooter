@@ -290,7 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 break;
             case SPIKES:
-                createEnemy(spikeHealth, ground.x - tileWidth, PIT, tileWidth, spikeHeight, 0);
+                createEnemy(spikeHealth, ground.x - tileWidth -20, PIT, tileWidth + 40, spikeHeight, 0);
                 console.log("SPIKES");
                 if (currentTerrainCounter < 2) {
                     goUp = Math.floor(Math.random() * 2);
@@ -347,7 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateEnemies() {
         enemyArr.forEach(e => {
-            if (e.x <= 0) { //Removes Enemies if further than 0 on left
+            if (e.x + e.width <= 0) { //Removes Enemies if further than 0 on left
                 $("#" + e.element).parent().remove();
             }
             if(e.dir == -1){
