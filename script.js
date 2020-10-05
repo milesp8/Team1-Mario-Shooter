@@ -73,33 +73,99 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(checkBulletEnemyCollision, TICK_SPEED);
 
 
-    
-    document.getElementById('playerHealth').innerHTML = playerHealth; //initialize playerHealth
+    initialize();
 
+    function initialize() {
 
-    character.element = "character";
-    character.x = 0;
-    character.y = 0
-    character.width = 30;
-    character.height = 50;
-    character.AbsoluteX = 0;
-    character.AbsoluteLeft = 0;
-    character.acceleration = 0;
+        //Initialize character
+        character.element = "character";
+        character.x = 0;
+        character.y = 0
+        character.width = 30;
+        character.height = 50;
+        character.AbsoluteX = 0;
+        character.AbsoluteLeft = 0;
+        character.acceleration = 0;
+        updateCharacter();
 
-    
+        //Set up the character to flicker when damaged.
+        setInterval(() => {
+            if(dmgCooldown)
+                $('.character').fadeTo(100, 0.3, function() { $(this).fadeTo(100, 1.0); });
+            else{$('.character').stop().fadeTo(0, 1.0)}
+        }, 200);
 
-    //var gravity = 0.8  //can be used for alternative jumping function
+        //Initialize player health display
+        document.getElementById('playerHealth').innerHTML = playerHealth;
 
-    //creates test enemies
-    
-    createGround(0, 0, GROUND_WIDTH, LOW);
-    updateGroundArr();
+        //Create inital ground
+        createGround(0, 0, GROUND_WIDTH, LOW);
+        updateGroundArr();
 
-    createEnemy(enemyHealth, 500, 500, groundArr[groundArrayIndex2(500)].height, 60, 50, 1);
-    createEnemy(enemyHealth, 800, 800, groundArr[groundArrayIndex2(800)].height, 60, 50, 1);
+        //First call of gravity to calibrate character to ground level.
+        gravity();
+        
+        //Initialize first 2 enemies
+        if (groundArr[groundArrayIndex2(500)].height == PIT) {
+            createEnemy(enemyHealth, 700, 700, groundArr[groundArrayIndex2(700)].height, 60, 50, 1);
+        } else {
+            createEnemy(enemyHealth, 500, 500, groundArr[groundArrayIndex2(500)].height, 60, 50, 1);
+        }
+        if (groundArr[groundArrayIndex2(800)].height == PIT) {
+            createEnemy(enemyHealth, 1000, 1000, groundArr[groundArrayIndex2(1000)].height, 60, 50, 1);
+        } else {
+            createEnemy(enemyHealth, 800, 800, groundArr[groundArrayIndex2(800)].height, 60, 50, 1);
+        }
 
-    updateCharacter();
-
+        //Start key listener for keydown
+        $(document).keydown(function (e) {
+            switch (e.which) {
+                case LEFT_KEY:  //left key (A)
+                    isMoving = 10;
+                    if (movingTimeout === -1) {
+                        moveLeft();
+                    }
+                    break;
+                case UP_KEY:  //up key (W)
+                    if (character.y <= Math.max(groundArr[groundArrayIndex(character)].height, groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1)].height)) {
+                        jump();
+                    }
+                    break;
+                case RIGHT_KEY:  //right key (D)
+                    isMoving = 10;
+                    if (movingTimeout === -1) {
+                        moveRight();
+                    }
+                    break;
+                case SPACE_KEY:
+                    if (shootingTimeout === -1) {
+                        shoot();
+                    }
+                    break;
+                default: return;
+            }
+        });
+        //Start key listener for key up.
+        $(document).keyup(function (e) {
+            switch (e.which) {
+                case LEFT_KEY:  //left key
+                    clearTimeout(movingTimeout);
+                    movingTimeout = -1;
+                    isMoving = 0;
+                    break;
+                case RIGHT_KEY:  //right key
+                    clearTimeout(movingTimeout);
+                    movingTimeout = -1;
+                    isMoving = 0;
+                    break;
+                case SPACE_KEY:
+                    clearTimeout(shootingTimeout);
+                    shootingTimeout = -1;
+                    break;
+                default: return;
+            }
+        });
+    }
     function gravity() {
         let maxGroundHeight = Math.max(groundArr[groundArrayIndex(character)].height, groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1)].height);
         if (character.y > maxGroundHeight && jumpCount == 0) {
@@ -311,18 +377,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
 
         }
-        //ground.height = groundHeights[Math.floor(Math.random() * groundHeights.length)];
         $("ul.groundList").append('<li><div class=ground id=' + ground.element + '></div></li>')
         $('#' + ground.element).css(({ bottom: ground.y, left: ground.x, width: width + 'px', height: ground.height + 'px' }));
         groundArr.push(ground)
         return ground;
     }
-
-    setInterval(() => {
-        if(dmgCooldown)
-            $('.character').fadeTo(100, 0.3, function() { $(this).fadeTo(100, 1.0); });
-        else{$('.character').stop().fadeTo(0, 1.0)}
-    }, 200);
 
     function updatePlayerHealth(change) {
         playerHealth += change;
@@ -415,7 +474,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     projArr = projArr.filter(item => item.element !== e.element)
                 }
             } else {
-                //$("#" + e.element).css('background-image', url(assets/Player/explosion.jpg));
                 $("#" + e.element).parent().remove();
                 projArr = projArr.filter(item => item.element !== e.element)
             }
@@ -456,9 +514,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     //Character jump motion
-    gravity();
     function jump() {
-        console.log(jumpCount);
         let maxGroundHeight = Math.max(groundArr[groundArrayIndex(character)].height, groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1)].height);
         character.y += 12 - character.acceleration;
         jumpCount++;
@@ -510,8 +566,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         movingTimeout = setTimeout(moveRight, 1000 / FRAMES);
         updateCharacter();
-        //updateEnemies();
-        //updateProj();
         updateGround();
         updateGroundArr();
     }
@@ -531,7 +585,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     groundArr.forEach(e => {
                         e.x += PLAYER_SPEED;
                     });
-                    //$('div.ground').css('left', (parseInt($('div.ground').css('left')) + 20) + 'px');
                     enemyArr.forEach(e => {
                         e.x += PLAYER_SPEED;
                     });
@@ -544,8 +597,6 @@ document.addEventListener('DOMContentLoaded', () => {
         movingTimeout = setTimeout(moveLeft, 1000 / FRAMES);
 
         updateCharacter();
-        //updateEnemies();
-        //updateProj();
         updateGround();
         updateGroundArr();
     }
@@ -556,85 +607,5 @@ document.addEventListener('DOMContentLoaded', () => {
         let currLaserID = 0;
         createProjectile(character.x + character.width / 3, character.y + 20);
         shootingTimeout = setTimeout(shoot, SHOOTING_DELAY);
-
-        /*xPos=character.style.left; ------> we should write function in terms of characters curr position pixel. 
-        createProjectile(character.style.left+450+"px",character.style.bottom+790+'px');*/
-
-
-        //Write function to move lasers
     }
-
-    //When key is pressed
-    $(document).keydown(function (e) {
-        switch (e.which) {
-            case LEFT_KEY:  //left key
-                isMoving = 10;
-                if (movingTimeout === -1) {
-                    moveLeft();
-                }
-                break;
-
-            case UP_KEY:  //up key
-
-                if (character.y <= Math.max(groundArr[groundArrayIndex(character)].height, groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1)].height)) {
-                    jump();
-                }
-                break;
-
-            case RIGHT_KEY:  //right key
-                isMoving = 10;
-                if (movingTimeout === -1) {
-                    moveRight();
-                }
-                break;
-
-            case DOWN_KEY:  //down key
-                break;
-
-            case SPACE_KEY:
-                if (shootingTimeout === -1) {
-                    shoot();
-                }
-                break;
-
-            default: return;
-        }
-    });
-
-    //When key is released
-    $(document).keyup(function (e) {
-        switch (e.which) {
-            case LEFT_KEY:  //left key
-                clearTimeout(movingTimeout);
-                movingTimeout = -1;
-                isMoving = 0;
-
-                break;
-
-            case UP_KEY:  //up key
-
-                $('div.character').stop(false, true);
-
-                break;
-
-            case RIGHT_KEY:  //right key
-                clearTimeout(movingTimeout);
-                movingTimeout = -1;
-                isMoving = 0;
-
-                break;
-
-            case DOWN_KEY:  //down key
-                break;
-
-            case SPACE_KEY:
-                clearTimeout(shootingTimeout);
-                shootingTimeout = -1;
-                break;
-
-            default: return;
-        }
-    });
-
-
 });
