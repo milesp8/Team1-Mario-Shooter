@@ -360,7 +360,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateEnemies() {
         enemyArr.forEach(e => {
-            if (e.AbsoluteX + e.width <= (character.AbsoluteLeft || e.health == 0)) { //Removes Enemies if further than absolute left
+            if (e.AbsoluteX + e.width <= (character.AbsoluteLeft) || e.health == 0) { //Removes Enemies if further than absolute left
                 $("#" + e.element).parent().remove();
                 enemyArr = enemyArr.filter(item => item.element !== e.element)
             }
