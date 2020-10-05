@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
     currentTerrainType = FLAT;
 
 
-
+    //Function to start the game
     function initialize() { //Start the game
         //Set up intervals for how often to update the game.
         setInterval(updateProj, TICK_SPEED);
@@ -165,6 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    //Functions to create objects
     function createGround() { //Create a ground object
         if (groundArr.length == 0) {
             var ground = new Object();
@@ -370,6 +371,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return proj;
     }
 
+    //Functions to update objects
     function updateCharacter() { //Update the character's  position
         $('#' + character.element).css('left', character.x + 'px');
     }
@@ -468,6 +470,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('score').innerHTML = score;
     }
 
+    //Functions to handle collisions
     function checkPlayerCollision() { //Check if the player touches an enemy
         enemyArr.forEach(e => {
             if ((((character.x > e.x && character.x < e.x + e.width) || (character.x + character.width > e.x && character.x + character.width < e.x + e.width)) && (character.y < e.y + e.height && character.y >= e.y)) && dmgCooldown == false) {
@@ -490,6 +493,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
     }
 
+    //Functions to handle player actions
     function moveRight() { //Handle right movement for the player
 
         direction = 1
@@ -581,6 +585,7 @@ document.addEventListener('DOMContentLoaded', () => {
         shootingTimeout = setTimeout(shoot, SHOOTING_DELAY);
     }
 
+    //Function for gravity
     function gravity() { //Handle gravity (the character falling to the earth)
         let maxGroundHeight = Math.max(groundArr[groundArrayIndex(character)].height, groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1)].height);
         if (character.y > maxGroundHeight && jumpCount == 0) { //If the character is off the ground
@@ -595,6 +600,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(gravity, 1000 / FRAMES);
     }
 
+    //Helper functions
     function groundArrayIndex(character) { //Helper function used to find the tile below the player
         dif = character.AbsoluteX - groundArr[0].AbsoluteX;
         index = Math.floor(dif / GROUND_WIDTH);
