@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const tickSpeed = 30;
     const playerSpeed = 10;
     const ShootingTick =300;
+    const enemySpeed = 10;
 
     const PIT = 20;
     const LOW = 100;
@@ -51,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //startGame()
     //console.log(ground.style.bottom);
     setInterval(updateProj, tickSpeed);//Lags the game quite a bit
+    setInterval(updateEnemies, tickSpeed);//Lags the game quite a bit
 
 
     var enemyArr = [];
@@ -81,8 +83,8 @@ document.addEventListener('DOMContentLoaded', () => {
     var shootingTimeout = -1;
 
     //creates test enemies
-    createEnemy(3, 500, 150, 20, 100);
-    createEnemy(2, 800, 175, 60, 50);
+    createEnemy(3, 500, 150, 20, 100, 1);
+    createEnemy(2, 800, 175, 60, 50, 0);
 
     createGround(0, 0, GROUND_WIDTH, LOW);
     updateGroundArr();
@@ -102,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
         $(".character").css(({ bottom: character.y + 'px' }))
         setTimeout(gravity, 1000 / frames);
     }
-    function createEnemy(health, x, y, width, height) {
+    function createEnemy(health, x, y, width, height,dir) {
         var enemy = new Object();
         enemy.element = "enemy" + Math.floor(Math.random() * 100000);
         enemy.health = health;
@@ -110,6 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
         enemy.y = y;
         enemy.height = height;
         enemy.width = width;
+        enemy.dir = dir;
         $("ul.enemyList").append('<li><div class=enemy id=' + enemy.element + '></div></li>')
         $('#' + enemy.element).css(({ bottom: y + 'px', left: x + 'px', width: width + 'px', height: height + 'px' }));
         enemyArr.push(enemy)
@@ -339,7 +342,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateEnemies() {
         enemyArr.forEach(e => {
-            $('#' + e.element).css('left', e.x + 'px');
+            if (e.x <= 0) { //Removes Enemies if further than 0 on left
+                $("#" + e.element).parent().remove();
+            }
+            e.x += enemySpeed * e.dir; //Handles Movement of enemies
+            $('#' + e.element).css('left', e.x + 'px'); 
         });
     }
 
@@ -432,7 +439,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         movingTimeout = setTimeout(moveRight, 1000 / frames);
         updateCharacter();
-        updateEnemies();
+        //updateEnemies();
         //updateProj();
         updateGround();
         updateGroundArr();
@@ -466,7 +473,7 @@ document.addEventListener('DOMContentLoaded', () => {
         movingTimeout = setTimeout(moveLeft, 1000 / frames);
 
         updateCharacter();
-        updateEnemies();
+        //updateEnemies();
         //updateProj();
         updateGround();
         updateGroundArr();
