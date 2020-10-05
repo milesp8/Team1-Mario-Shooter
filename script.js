@@ -130,8 +130,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return enemy;
     }
     function createProjectile(x, y) {
-        console.log(character.x);
-        console.log(x);
         var proj = new Object();
         proj.element = "proj" + Math.floor(Math.random() * 100000);
         proj.x = x;
@@ -170,7 +168,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ground.AbsoluteX = groundArr[groundArr.length - 1].AbsoluteX + 100;
         ground.y = 0;
         ground.width = width;
-        console.log(currentTerrainCounter, currentTerrainType)
         switch (currentTerrainType) {
             case FLAT:
                 if (currentTerrainCounter < 3) {
@@ -295,7 +292,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
             case SPIKES:
                 createEnemy(spikeHealth, ground.AbsoluteX - tileWidth - 20, 0, PIT, tileWidth + 40, spikeHeight, 0);
-                console.log("SPIKES");
                 if (currentTerrainCounter < 2) {
                     goUp = Math.floor(Math.random() * 2);
                     if (goUp == 1) {
@@ -314,7 +310,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
 
         }
-        console.log(ground.height, currentTerrainCounter, currentTerrainType)
         //ground.height = groundHeights[Math.floor(Math.random() * groundHeights.length)];
         $("ul.groundList").append('<li><div class=ground id=' + ground.element + '></div></li>')
         $('#' + ground.element).css(({ bottom: ground.y, left: ground.x, width: width + 'px', height: ground.height + 'px' }));
