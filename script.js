@@ -291,7 +291,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 break;
             case SPIKES:
-                createEnemy(spikeHealth, ground.AbsoluteX - tileWidth - 20, 0, PIT, tileWidth + 40, spikeHeight, 0);
+                let spikeName = createEnemy(spikeHealth, ground.AbsoluteX - tileWidth - 20, 0, PIT, tileWidth + 40, spikeHeight, 0).element;
+                $('#'+spikeName).addClass("spike");
                 if (currentTerrainCounter < 2) {
                     goUp = Math.floor(Math.random() * 2);
                     if (goUp == 1) {
