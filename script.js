@@ -107,14 +107,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         //Initialize first 2 enemies
         if (groundArr[groundArrayIndex2(500)].height == PIT) {
-            createEnemy(enemyHealth, 700, 700, groundArr[groundArrayIndex2(700)].height, 60, 50, 1);
+            createEnemy(enemyHealth, 700, groundArr[groundArrayIndex2(700)].height, 60, 50, 1);
         } else {
-            createEnemy(enemyHealth, 500, 500, groundArr[groundArrayIndex2(500)].height, 60, 50, 1);
+            createEnemy(enemyHealth, 500, groundArr[groundArrayIndex2(500)].height, 60, 50, 1);
         }
         if (groundArr[groundArrayIndex2(800)].height == PIT) {
-            createEnemy(enemyHealth, 1000, 1000, groundArr[groundArrayIndex2(1000)].height, 60, 50, 1);
+            createEnemy(enemyHealth, 1000, groundArr[groundArrayIndex2(1000)].height, 60, 50, 1);
         } else {
-            createEnemy(enemyHealth, 800, 800, groundArr[groundArrayIndex2(800)].height, 60, 50, 1);
+            createEnemy(enemyHealth, 800, groundArr[groundArrayIndex2(800)].height, 60, 50, 1);
         }
 
         //Start key listener for keydown
@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(gravity, 1000 / FRAMES);
     }
 
-    function createEnemy(health, AbsoluteX, x, y, width, height, dir) {
+    function createEnemy(health, AbsoluteX, y, width, height, dir) {
         var enemy = new Object();
         enemy.element = "enemy" + enemyCounter;
         enemyCounter++;
@@ -359,7 +359,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     break;
                 case SPIKES:
-                    let spikeName = createEnemy(SPIKE_HEALTH, ground.AbsoluteX - GROUND_WIDTH - 20, 0, PIT, GROUND_WIDTH + 40, SPIKE_HEIGHT, 0).element;
+                    let spikeName = createEnemy(SPIKE_HEALTH, ground.AbsoluteX - GROUND_WIDTH - 20, PIT, GROUND_WIDTH + 40, SPIKE_HEIGHT, 0).element;
                     $('#' + spikeName).addClass("spike");
                     if (currentTerrainCounter < 2) {
                         goUp = Math.floor(Math.random() * 2);
@@ -450,7 +450,7 @@ document.addEventListener('DOMContentLoaded', () => {
             $('#' + e.element).css('left', e.x + 'px');
         });
         if (enemyArr.length < minEnemies && groundArr[groundArr.length - 1].height != 20) {
-            createEnemy(enemyHealth, groundArr[groundArr.length - 1].AbsoluteX, 0, groundArr[groundArr.length - 1].height, 60, 50, 1);
+            createEnemy(enemyHealth, groundArr[groundArr.length - 1].AbsoluteX, groundArr[groundArr.length - 1].height, 60, 50, 1);
         }
     }
 
