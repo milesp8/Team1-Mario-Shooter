@@ -344,6 +344,7 @@ document.addEventListener('DOMContentLoaded', () => {
         enemyArr.forEach(e => {
             if (e.x <= 0) { //Removes Enemies if further than 0 on left
                 $("#" + e.element).parent().remove();
+                enemyArr = enemyArr.filter(item => item.element !== e.element)
             }
             if (e.dir == -1) {
                 nextEnemyLocation = e.x + (2 * enemySpeed * e.dir);
@@ -387,10 +388,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 $('#' + e.element).css('left', e.x + 'px');
                 if (e.x > window.innerWidth || e.x <= 0) {
                     $("#" + e.element).parent().remove();
+                    projArr = projArr.filter(item => item.element !== e.element)
                 }
             } else {
                 //$("#" + e.element).css('background-image', url(assets/Player/explosion.jpg));
                 $("#" + e.element).parent().remove();
+                projArr = projArr.filter(item => item.element !== e.element)
             }
         });
     }
