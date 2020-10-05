@@ -89,11 +89,12 @@ document.addEventListener('DOMContentLoaded', () => {
     var dmgCooldown = false; // tracks if there has been dmg 
 
     //creates test enemies
-    createEnemy(3, 500, 150, 20, 100, 1);
-    createEnemy(2, 800, 300, 60, 50, 1);
-
+    
     createGround(0, 0, GROUND_WIDTH, LOW);
     updateGroundArr();
+
+    createEnemy(3, 500, groundArr[groundArrayIndex2(500)].height, 20, 100, 1);
+    createEnemy(2, 800, groundArr[groundArrayIndex2(800)].height, 60, 50, 1);
 
     updateCharacter();
 
