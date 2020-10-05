@@ -93,8 +93,8 @@ document.addEventListener('DOMContentLoaded', () => {
     createGround(0, 0, GROUND_WIDTH, LOW);
     updateGroundArr();
 
-    createEnemy(3, 500, 500, groundArr[groundArrayIndex2(500)].height, 20, 100, 1);
-    createEnemy(2, 800, 800, groundArr[groundArrayIndex2(800)].height, 60, 50, 1);
+    createEnemy(3, 500, groundArr[groundArrayIndex2(500)].height, 20, 100, 1);
+    createEnemy(2, 800, groundArr[groundArrayIndex2(800)].height, 60, 50, 1);
 
     updateCharacter();
 
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
         $(".character").css(({ bottom: character.y + 'px' }))
         setTimeout(gravity, 1000 / frames);
     }
-    function createEnemy(health, AbsoluteX, x, y, width, height, dir) {
+    function createEnemy(health, AbsoluteX, y, width, height, dir) {
         var enemy = new Object();
         enemy.element = "enemy" + Math.floor(Math.random() * 100000);
         enemy.health = health;
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
         enemy.width = width;
         enemy.dir = dir;
         $("ul.enemyList").append('<li><div class=enemy id=' + enemy.element + '></div></li>')
-        $('#' + enemy.element).css(({ bottom: y + 'px', left: x + 'px', width: width + 'px', height: height + 'px' }));
+        $('#' + enemy.element).css(({ bottom: y + 'px', left: enemy.x + 'px', width: width + 'px', height: height + 'px' }));
         enemyArr.push(enemy)
         if (enemyArr.length > 10) {
             $("#" + enemyArr.shift().element).parent().remove();
@@ -294,7 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 break;
             case SPIKES:
-                createEnemy(spikeHealth, ground.AbsoluteX - tileWidth - 20, 0, PIT, tileWidth + 40, spikeHeight, 0);
+                createEnemy(spikeHealth, ground.AbsoluteX - tileWidth - 20, PIT, tileWidth + 40, spikeHeight, 0);
                 console.log("SPIKES");
                 if (currentTerrainCounter < 2) {
                     goUp = Math.floor(Math.random() * 2);
@@ -351,7 +351,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateEnemies() {
         enemyArr.forEach(e => {
-            if (e.x + e.width <= (-2 * GROUND_WIDTH)) { //Removes Enemies if further than absolute left
+            if (e.AbsoluteX + e.width <= (character.AbsoluteLeft)) { //Removes Enemies if further than absolute left
                 $("#" + e.element).parent().remove();
                 enemyArr = enemyArr.filter(item => item.element !== e.element)
             }
