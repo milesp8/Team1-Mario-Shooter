@@ -354,12 +354,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 $("#" + e.element).parent().remove();
                 enemyArr = enemyArr.filter(item => item.element !== e.element)
             }
-            if (e.dir == -1) {
-                nextEnemyLocation = e.x + (2 * enemySpeed * e.dir);
-            } else {
-                nextEnemyLocation = e.x + (e.dir - enemySpeed);
+            nextEnemyLocation = e.x + (enemySpeed * e.dir);
+            if (e.dir == 1) {
+                nextEnemyLocation += e.width;
             }
-            nextGroundIndex = groundArr.findIndex((element) => element.x > nextEnemyLocation);
+            nextGroundIndex = groundArrayIndex2(nextEnemyLocation);
             nextGroundHeight = 0;
             if (nextGroundIndex > -1) {
                 nextGroundHeight = (groundArr[nextGroundIndex].height);
