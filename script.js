@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
     var direction = 1  //direction of the character and projectile ( 1 = right, -1 = left)
     var isMoving = 0 //Tracks if the player is moving or not, 0 if still, 10 if moving
     var jumpCount = 0
+    var playerHealth = 3;
+    document.getElementById('playerHealth').innerHTML = playerHealth; //initialize playerHealth
 
     var score = 0 //Tracks player score
     const moveScore = 1
@@ -306,6 +308,10 @@ document.addEventListener('DOMContentLoaded', () => {
         $('#' + ground.element).css(({ bottom: ground.y, left: ground.x, width: width + 'px', height: ground.height + 'px' }));
         groundArr.push(ground)
         return ground;
+    }
+    function updatePlayerHealth(change){
+        playerHealth += change;
+        document.getElementById('playerHealth').innerHTML = playerHealth;
     }
 
     function updateScore(increase){
