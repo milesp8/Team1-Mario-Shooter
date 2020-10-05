@@ -436,9 +436,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     function checkBulletEnemyCollision(){
         projArr.forEach(e => {
+            var hasCollided = false;
             enemyArr.forEach(f => {
-                if (((e.x + e.width >= f.x && e.x + e.width <= f.x + f.width) ||  (e.x > f.x && e.x < f.x + f.width)) && ((e.y >= f.y && e.y <= f.y + f.height) || (e.y + e.height >= f.y && e.y + e.height <= f.y + f.height ) )){
+                if ((((e.x + e.width >= f.x && e.x + e.width <= f.x + f.width) ||  (e.x > f.x && e.x < f.x + f.width)) && ((e.y >= f.y && e.y <= f.y + f.height) || (e.y + e.height >= f.y && e.y + e.height <= f.y + f.height ))) && hasCollided == false){
                     f.health = f.health - 1;
+                    hasCollided = true;
                     $("#" + e.element).parent().remove();
                     projArr = projArr.filter(item => item.element !== e.element)
                 }
