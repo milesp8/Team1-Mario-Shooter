@@ -423,7 +423,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function checkPlayerCollision(){ //Check if player touches an enemy
         enemyArr.forEach(e => {
-            if(((character.x > e.x && character.x < e.x + e.width) || (character.x + character.width > e.x && character.x + character.width < e.x + e.width) && (character.y < e.y + e.height && character.y >= e.y)) && dmgCooldown == false){
+            if((((character.x > e.x && character.x < e.x + e.width) || (character.x + character.width > e.x && character.x + character.width < e.x + e.width)) && (character.y < e.y + e.height && character.y >= e.y)) && dmgCooldown == false){
                 updatePlayerHealth(-1);
             }
         });
