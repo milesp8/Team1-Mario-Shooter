@@ -66,16 +66,17 @@ document.addEventListener('DOMContentLoaded', () => {
     currentTerrainCounter = 0;
     currentTerrainType = FLAT;
 
-    //Setting up intervals for how often to update the game.
-    setInterval(updateProj, TICK_SPEED);
-    setInterval(updateEnemies, TICK_SPEED);
-    setInterval(checkPlayerCollision, TICK_SPEED);
-    setInterval(checkBulletEnemyCollision, TICK_SPEED);
+    
 
 
     initialize();
 
     function initialize() {
+        //Set up intervals for how often to update the game.
+        setInterval(updateProj, TICK_SPEED);
+        setInterval(updateEnemies, TICK_SPEED);
+        setInterval(checkPlayerCollision, TICK_SPEED);
+        setInterval(checkBulletEnemyCollision, TICK_SPEED);
 
         //Initialize character
         character.element = "character";
@@ -104,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         //First call of gravity to calibrate character to ground level.
         gravity();
-        
+
         //Initialize first 2 enemies
         if (groundArr[groundArrayIndex2(500)].height == PIT) {
             createEnemy(enemyHealth, 700, 700, groundArr[groundArrayIndex2(700)].height, 60, 50, 1);
