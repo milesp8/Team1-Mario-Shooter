@@ -34,7 +34,7 @@ h3 {
 }
 
 .enemy {
-    background-color: green;
+    background-color: rgb(83, 0, 94);
     height: 30px;
     width: 30px;
     position: absolute;
