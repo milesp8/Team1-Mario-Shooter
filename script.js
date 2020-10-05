@@ -1,16 +1,17 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    //key press constants mapping
+    //Key press constants mapping
     const SPACE_KEY = 32; //shooting key.
     const UP_KEY = 87; //double press jump key
     const RIGHT_KEY = 68; //change direction key 
     const DOWN_KEY = 83; //change direction key
     const LEFT_KEY = 65; //Change dir key
 
-    //game constants
+    //Game constants
     const TICK_SPEED = 30;
     const SHOOTING_DELAY = 300;
+    const FRAMES = 60;
 
     const GROUND_WIDTH = 100;
     const SPIKE_HEIGHT = 30;
@@ -23,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ENEMY_SPEED = 10;
     const PROJECTILE_SPEED = 40;
 
-    //constant arrays for terain generation
+    //Constant arrays for terain generation
     const PIT = 20;
     const LOW = 100;
     const MEDIUM = 200;
@@ -45,45 +46,37 @@ document.addEventListener('DOMContentLoaded', () => {
     var playerHealth = 3; //Tracks player health
     var score = 0; //Tracks player score
 
-    //object arrays;
+    //Game objects;
+    var character = new Object();
     var groundArr = [];
     var enemyArr = [];
     var projArr = [[], []];
 
-    minEnemies = 4;
+    //Variables for tracking timeouts
+    var movingTimeout = -1; //Tracks if the character can move yet
+    var shootingTimeout = -1; //Tracks if the character can shoot yet
+    var dmgCooldown = false; //Tracks if there has been damage 
 
+    //Variables for use in generating enemies
+    var enemyCounter = 0;
+    var minEnemies = 4;
     var enemyHealth = 2;
 
-    
-    var enemyCounter = 0;
-
-
+    //Variables for use in generating terrain
     currentTerrainCounter = 0;
-    
-    currentTerrainType = terrainTypes[FLAT];
+    currentTerrainType = FLAT;
 
-    // groundTop = 0;
-
-    // ground = document.querySelector('.ground')
-
-    // function startGame() {
-    //   groundTop = 100;
-    /*ground.style.top = groundTop + 'px';*/
-    // ground.style.bottom=0+'px';
-    //}
-
-    //startGame()
-    //console.log(ground.style.bottom);
-    setInterval(updateProj, TICK_SPEED);//Lags the game quite a bit
-    setInterval(updateEnemies, TICK_SPEED);//Lags the game quite a bit
+    //Setting up intervals for how often to update the game.
+    setInterval(updateProj, TICK_SPEED);
+    setInterval(updateEnemies, TICK_SPEED);
     setInterval(checkPlayerCollision, TICK_SPEED);
     setInterval(checkBulletEnemyCollision, TICK_SPEED);
 
+
+    
     document.getElementById('playerHealth').innerHTML = playerHealth; //initialize playerHealth
 
-    var controller = new Object();
 
-    var character = new Object();
     character.element = "character";
     character.x = 0;
     character.y = 0
@@ -96,11 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
 
     //var gravity = 0.8  //can be used for alternative jumping function
-    var isJumping = false;
-    var movingTimeout = -1;
-    var frames = 60;
-    var shootingTimeout = -1;
-    var dmgCooldown = false; // tracks if there has been dmg 
 
     //creates test enemies
     
@@ -123,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
             character.acceleration = 0;
         }
         $(".character").css(({ bottom: character.y + 'px' }))
-        setTimeout(gravity, 1000 / frames);
+        setTimeout(gravity, 1000 / FRAMES);
     }
     function createEnemy(health, AbsoluteX, x, y, width, height, dir) {
         var enemy = new Object();
@@ -477,7 +465,7 @@ document.addEventListener('DOMContentLoaded', () => {
         character.acceleration += .25
         $(".character").css(({ bottom: character.y + 'px' }))
         if (jumpCount < 200 && character.y >= maxGroundHeight) {
-            jumpingTimeout = setTimeout(jump, 500 / frames);
+            jumpingTimeout = setTimeout(jump, 500 / FRAMES);
         }
         else {
             jumpCount = 0;
@@ -520,7 +508,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
-        movingTimeout = setTimeout(moveRight, 1000 / frames);
+        movingTimeout = setTimeout(moveRight, 1000 / FRAMES);
         updateCharacter();
         //updateEnemies();
         //updateProj();
@@ -553,7 +541,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
-        movingTimeout = setTimeout(moveLeft, 1000 / frames);
+        movingTimeout = setTimeout(moveLeft, 1000 / FRAMES);
 
         updateCharacter();
         //updateEnemies();
