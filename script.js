@@ -68,9 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    initialize();
-
-    function initialize() {
+    function initialize() { //Start the game
         //Set up intervals for how often to update the game.
         setInterval(updateProj, TICK_SPEED);
         setInterval(updateEnemies, TICK_SPEED);
@@ -167,56 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function gravity() {
-        let maxGroundHeight = Math.max(groundArr[groundArrayIndex(character)].height, groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1)].height);
-        if (character.y > maxGroundHeight && jumpCount == 0) {
-            character.y -= (8 + character.acceleration);
-            character.acceleration += .25;
-        }
-        else if (jumpCount == 0) {
-            character.y = maxGroundHeight;
-            character.acceleration = 0;
-        }
-        $(".character").css(({ bottom: character.y + 'px' }))
-        setTimeout(gravity, 1000 / FRAMES);
-    }
-
-    function createEnemy(health, AbsoluteX, y, width, height, dir) {
-        var enemy = new Object();
-        enemy.element = "enemy" + enemyCounter;
-        enemyCounter++;
-        enemy.health = health;
-        enemy.AbsoluteX = AbsoluteX;
-        enemy.x = groundArr[groundArrayIndex2(AbsoluteX)].x + (AbsoluteX - groundArr[groundArrayIndex2(AbsoluteX)].AbsoluteX);
-        enemy.y = y;
-        enemy.height = height;
-        enemy.width = width;
-        enemy.dir = dir;
-        $("ul.enemyList").append('<li><div class=enemy id=' + enemy.element + '></div></li>')
-        $('#' + enemy.element).css(({ bottom: y + 'px', left: enemy.x + 'px', width: width + 'px', height: height + 'px' }));
-        enemyArr.push(enemy)
-        return enemy;
-    }
-
-    function createProjectile(x, y) {
-        var proj = new Object();
-        proj.element = "proj" + Math.floor(Math.random() * 100000);
-        proj.x = x;
-        proj.y = y;
-        proj.dir = direction;
-        $("ul.projList").append('<li><div class=proj id=' + proj.element + '></div></li>')
-        $('#' + proj.element).css(({ bottom: y + 'px', left: x + 'px' }));
-        if (direction == -1) {
-            $('#' + proj.element).css(({ transform: "scaleX(-1)" }));
-        }
-        projArr.push(proj);
-        if (projArr.length > 10) {
-            $("#" + projArr.shift().element).parent().remove()
-        }
-        return proj;
-    }
-
-    function createGround() {
+    function createGround() { //Create a ground object
         if (groundArr.length == 0) {
             var ground = new Object();
             ground.element = "ground" + Math.floor(Math.random() * 100000);
@@ -386,33 +335,52 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function updatePlayerHealth(change) {
-        playerHealth += change;
-        document.getElementById('playerHealth').innerHTML = playerHealth;
-        dmgCooldown = true;
-
-        setTimeout(() => {
-            dmgCooldown = false;
-            $('.character').stop().fadeTo(0, 1.0)
-        }, 2000);
+    function createEnemy(health, AbsoluteX, y, width, height, dir) { //Create an enemy object
+        var enemy = new Object();
+        enemy.element = "enemy" + enemyCounter;
+        enemyCounter++;
+        enemy.health = health;
+        enemy.AbsoluteX = AbsoluteX;
+        enemy.x = groundArr[groundArrayIndex2(AbsoluteX)].x + (AbsoluteX - groundArr[groundArrayIndex2(AbsoluteX)].AbsoluteX);
+        enemy.y = y;
+        enemy.height = height;
+        enemy.width = width;
+        enemy.dir = dir;
+        $("ul.enemyList").append('<li><div class=enemy id=' + enemy.element + '></div></li>')
+        $('#' + enemy.element).css(({ bottom: enemy.y + 'px', left: enemy.x + 'px', width: width + 'px', height: height + 'px' }));
+        enemyArr.push(enemy)
+        return enemy;
     }
 
-    function updateScore(increase) {
-        score += increase;
-        document.getElementById('score').innerHTML = score;
+    function createProjectile(x, y) { //Create a projectile object
+        var proj = new Object();
+        proj.element = "proj" + Math.floor(Math.random() * 100000);
+        proj.x = x;
+        proj.y = y;
+        proj.dir = direction;
+        $("ul.projList").append('<li><div class=proj id=' + proj.element + '></div></li>')
+        $('#' + proj.element).css(({ bottom: y + 'px', left: x + 'px' }));
+        if (direction == -1) {
+            $('#' + proj.element).css(({ transform: "scaleX(-1)" }));
+        }
+        projArr.push(proj);
+        if (projArr.length > 10) {
+            $("#" + projArr.shift().element).parent().remove()
+        }
+        return proj;
     }
 
-    function updateCharacter() {
+    function updateCharacter() { //Update the character's  position
         $('#' + character.element).css('left', character.x + 'px');
     }
 
-    function updateGround() {
+    function updateGround() { //Update the ground's position
         groundArr.forEach(e => {
             $('#' + e.element).css('left', e.x + 'px');
         });
     }
 
-    function updateGroundArr() {
+    function updateGroundArr() { //Update the ground array, deleting and creating ground tiles
         if (groundArr[0].AbsoluteX + groundArr[0].width < character.AbsoluteLeft) {
             $("#" + groundArr.shift().element).parent().remove()
         }
@@ -421,7 +389,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function updateEnemies() {
+    function updateEnemies() { //Update the enemy array, moving, deleting, and creating enemies
         enemyArr.forEach(e => {
             if (e.AbsoluteX + e.width <= (character.AbsoluteLeft) || e.health == 0) { //Removes Enemies if further than absolute left
                 if (e.health == 0) {
@@ -454,7 +422,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function updateProj() {
+    function updateProj() { //Update the projectile array, moving and deleting projectiles
         projArr.forEach(e => {
             if (e.dir == -1) { //If moving to the left
                 nextBulletLocation = e.x + (2 * PROJECTILE_SPEED * e.dir);  // future bullet location
@@ -484,13 +452,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function groundArrayIndex2(xPos) {
-        dif = xPos - groundArr[0].AbsoluteX;
-        index = Math.floor(dif / GROUND_WIDTH);
-        return index;
+    function updatePlayerHealth(change) { //Update the player's health
+        playerHealth += change;
+        document.getElementById('playerHealth').innerHTML = playerHealth;
+        dmgCooldown = true;
+
+        setTimeout(() => {
+            dmgCooldown = false;
+            $('.character').stop().fadeTo(0, 1.0)
+        }, 2000);
     }
 
-    function checkPlayerCollision() { //Check if player touches an enemy
+    function updateScore(increase) { //Update the player's score
+        score += increase;
+        document.getElementById('score').innerHTML = score;
+    }
+
+    function checkPlayerCollision() { //Check if the player touches an enemy
         enemyArr.forEach(e => {
             if ((((character.x > e.x && character.x < e.x + e.width) || (character.x + character.width > e.x && character.x + character.width < e.x + e.width)) && (character.y < e.y + e.height && character.y >= e.y)) && dmgCooldown == false) {
                 updatePlayerHealth(-1);
@@ -498,7 +476,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function checkBulletEnemyCollision() {
+    function checkBulletEnemyCollision() { //Check if a bullet touches an enemy
         projArr.forEach(e => {
             var hasCollided = false;
             enemyArr.forEach(f => {
@@ -512,31 +490,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
     }
 
-    function groundArrayIndex(character) {
-        dif = character.AbsoluteX - groundArr[0].AbsoluteX;
-        index = Math.floor(dif / GROUND_WIDTH);
-        return index;
-    }
-
-    //Character jump motion
-    function jump() {
-        let maxGroundHeight = Math.max(groundArr[groundArrayIndex(character)].height, groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1)].height);
-        character.y += 12 - character.acceleration;
-        jumpCount++;
-        character.acceleration += .25
-        $(".character").css(({ bottom: character.y + 'px' }))
-        if (jumpCount < 200 && character.y >= maxGroundHeight) {
-            jumpingTimeout = setTimeout(jump, 500 / FRAMES);
-        }
-        else {
-            jumpCount = 0;
-            character.y = maxGroundHeight;
-            character.acceleration = 0;
-        }
-    }
-
-    //Right movement
-    function moveRight() {
+    function moveRight() { //Handle right movement for the player
 
         direction = 1
         $("#character").css(({ transform: "scaleX(1)" }));
@@ -575,9 +529,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateGroundArr();
     }
 
-
-    //Left movement
-    function moveLeft() {
+    function moveLeft() { //Handle left movement for the player
         direction = -1
         $("#character").css(({ transform: "scaleX(-1)" }));
         if (character.AbsoluteX > character.AbsoluteLeft) {
@@ -606,11 +558,54 @@ document.addEventListener('DOMContentLoaded', () => {
         updateGroundArr();
     }
 
-    //Shooting Functionality
-    function shoot() {
+    function jump() { //Handle the character jumping
+        let maxGroundHeight = Math.max(groundArr[groundArrayIndex(character)].height, groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1)].height);
+        character.y += 12 - character.acceleration;
+        jumpCount++;
+        character.acceleration += .25
+        $(".character").css(({ bottom: character.y + 'px' }))
+        if (jumpCount < 200 && character.y >= maxGroundHeight) {
+            jumpingTimeout = setTimeout(jump, 500 / FRAMES);
+        }
+        else {
+            jumpCount = 0;
+            character.y = maxGroundHeight;
+            character.acceleration = 0;
+        }
+    }
+
+    function shoot() { //Handle the character shooting
         let laserID
         let currLaserID = 0;
         createProjectile(character.x + character.width / 3, character.y + 20);
         shootingTimeout = setTimeout(shoot, SHOOTING_DELAY);
     }
+
+    function gravity() { //Handle gravity (the character falling to the earth)
+        let maxGroundHeight = Math.max(groundArr[groundArrayIndex(character)].height, groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1)].height);
+        if (character.y > maxGroundHeight && jumpCount == 0) { //If the character is off the ground
+            character.y -= (8 + character.acceleration);
+            character.acceleration += .25;
+        }
+        else if (jumpCount == 0) { //If the character is on the ground
+            character.y = maxGroundHeight;
+            character.acceleration = 0;
+        }
+        $(".character").css(({ bottom: character.y + 'px' }))
+        setTimeout(gravity, 1000 / FRAMES);
+    }
+
+    function groundArrayIndex(character) { //Helper function used to find the tile below the player
+        dif = character.AbsoluteX - groundArr[0].AbsoluteX;
+        index = Math.floor(dif / GROUND_WIDTH);
+        return index;
+    }
+
+    function groundArrayIndex2(xPos) { //Helper function used to find the tile below the player
+        dif = xPos - groundArr[0].AbsoluteX;
+        index = Math.floor(dif / GROUND_WIDTH);
+        return index;
+    }
+
+    initialize();
 });
