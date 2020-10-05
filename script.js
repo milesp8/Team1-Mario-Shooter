@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //creates test enemies
     createEnemy(3, 500, 150, 20, 100, 1);
-    createEnemy(2, 800, 175, 60, 50, 0);
+    createEnemy(2, 800, 300, 60, 50, 1);
 
     createGround(0, 0, GROUND_WIDTH, LOW);
     updateGroundArr();
@@ -345,17 +345,33 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.x <= 0) { //Removes Enemies if further than 0 on left
                 $("#" + e.element).parent().remove();
             }
-            e.x += enemySpeed * e.dir; //Handles Movement of enemies
+            if(e.dir == -1){
+                nextEnemyLocation = e.x + (2 * enemySpeed * e.dir);
+            }else{
+                nextEnemyLocation = e.x + (e.dir - enemySpeed);
+            }
+            nextGroundIndex = groundArr.findIndex((element) => element.x > nextEnemyLocation);
+            nextGroundHeight = 0;
+            if (nextGroundIndex > -1){
+                nextGroundHeight = (groundArr[nextGroundIndex].height);
+            }
+            if(e.y == nextGroundHeight){ //CHANGE TO == AFTER GENERATION 
+                e.x += enemySpeed * e.dir; //Handles Movement of enemies
+            }
+            else{
+                e.dir = e.dir * -1;
+            }
+            
             $('#' + e.element).css('left', e.x + 'px'); 
         });
     }
 
     function updateProj() {
         projArr.forEach(e => {
-            if(e.dir == -1){
+            if(e.dir == -1){ //If moving to the left
             nextBulletLocation = e.x + (2 * projSpeed * e.dir);  // future bullet location
-            }
-            else{
+            } 
+            else{ //If moving right
                 nextBulletLocation = e.x + (e.dir - projSpeed);  // future bullet location
             }
             nextGroundIndex = groundArr.findIndex((element) => element.x > nextBulletLocation)  // find index of ground at that future bullet index
