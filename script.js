@@ -93,8 +93,8 @@ document.addEventListener('DOMContentLoaded', () => {
     createGround(0, 0, GROUND_WIDTH, LOW);
     updateGroundArr();
 
-    createEnemy(3, 500, groundArr[groundArrayIndex2(500)].height, 20, 100, 1);
-    createEnemy(2, 800, groundArr[groundArrayIndex2(800)].height, 60, 50, 1);
+    createEnemy(3, 500, 500, groundArr[groundArrayIndex2(500)].height, 20, 100, 1);
+    createEnemy(2, 800, 800, groundArr[groundArrayIndex2(800)].height, 60, 50, 1);
 
     updateCharacter();
 
@@ -111,11 +111,12 @@ document.addEventListener('DOMContentLoaded', () => {
         $(".character").css(({ bottom: character.y + 'px' }))
         setTimeout(gravity, 1000 / frames);
     }
-    function createEnemy(health, x, y, width, height, dir) {
+    function createEnemy(health, AbsoluteX, x, y, width, height, dir) {
         var enemy = new Object();
         enemy.element = "enemy" + Math.floor(Math.random() * 100000);
         enemy.health = health;
-        enemy.x = x;
+        enemy.AbsoluteX = AbsoluteX;
+        enemy.x = groundArr[groundArrayIndex2(AbsoluteX)].x + (AbsoluteX - groundArr[groundArrayIndex2(AbsoluteX)].AbsoluteX);
         enemy.y = y;
         enemy.height = height;
         enemy.width = width;
@@ -293,7 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 break;
             case SPIKES:
-                createEnemy(spikeHealth, ground.x - tileWidth - 20, PIT, tileWidth + 40, spikeHeight, 0);
+                createEnemy(spikeHealth, ground.AbsoluteX - tileWidth - 20, 0, PIT, tileWidth + 40, spikeHeight, 0);
                 console.log("SPIKES");
                 if (currentTerrainCounter < 2) {
                     goUp = Math.floor(Math.random() * 2);
@@ -354,9 +355,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 $("#" + e.element).parent().remove();
                 enemyArr = enemyArr.filter(item => item.element !== e.element)
             }
-            nextEnemyLocation = e.x + (enemySpeed * e.dir);
+            nextEnemyLocation = e.AbsoluteX + (enemySpeed * e.dir);
             if (e.dir == 1) {
-                nextEnemyLocation += e.width;
+                nextEnemyLocation += e.width - 1;
             }
             nextGroundIndex = groundArrayIndex2(nextEnemyLocation);
             nextGroundHeight = 0;
@@ -364,7 +365,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 nextGroundHeight = (groundArr[nextGroundIndex].height);
             }
             if (e.y == nextGroundHeight) { //CHANGE TO == AFTER GENERATION 
-                e.x += enemySpeed * e.dir; //Handles Movement of enemies
+                e.AbsoluteX += enemySpeed * e.dir; //Handles Movement of enemies
+                e.x += enemySpeed * e.dir;
             }
             else {
                 e.dir = e.dir * -1;
