@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(updateProj, tickSpeed);//Lags the game quite a bit
     setInterval(updateEnemies, tickSpeed);//Lags the game quite a bit
     setInterval(checkPlayerCollision, tickSpeed);
+    setInterval(checkBulletEnemyCollision, tickSpeed);
 
 
     var enemyArr = [];
@@ -360,7 +361,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateEnemies() {
         enemyArr.forEach(e => {
-            if (e.AbsoluteX + e.width <= (character.AbsoluteLeft || e.health == 0)) { //Removes Enemies if further than absolute left
+            if (e.AbsoluteX + e.width <= (character.AbsoluteLeft) || e.health == 0) { //Removes Enemies if further than absolute left
                 $("#" + e.element).parent().remove();
                 enemyArr = enemyArr.filter(item => item.element !== e.element)
             }
@@ -432,7 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function checkBulletEnemyCollision(){
         projArr.forEach(e => {
             enemyArr.forEach(f => {
-                if ((e.x + e.width >= f.x && e.x + e.width <= f.x + f.width) && ((e.y >= f.y && e.y <= f.y + f.height) || (e.y + e.height >= f.y && e.y + e.height <= f.y + f.height ) )){
+                if (((e.x + e.width >= f.x && e.x + e.width <= f.x + f.width) ||  (e.x > f.x && e.x < f.x + f.width)) && ((e.y >= f.y && e.y <= f.y + f.height) || (e.y + e.height >= f.y && e.y + e.height <= f.y + f.height ) )){
                     f.health = f.health - 1;
                     $("#" + e.element).parent().remove();
                     projArr = projArr.filter(item => item.element !== e.element)
