@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     var score = 0 //Tracks player score
     const moveScore = 1
     const killScore = 5
-    minEnemies = 2;
+    minEnemies = 4;
 
     const projSpeed = 40;
     const tickSpeed = 30;
@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const MEDIUM = 200;
     const HIGH = 300;
     groundHeights = [PIT, LOW, MEDIUM, HIGH];
+    var enemyCounter = 0;
 
 
     currentTerrainCounter = 0;
@@ -114,7 +115,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     function createEnemy(health, AbsoluteX, x, y, width, height, dir) {
         var enemy = new Object();
-        enemy.element = "enemy" + Math.floor(Math.random() * 100000);
+        enemy.element = "enemy" + enemyCounter;
+        enemyCounter++;
         enemy.health = health;
         enemy.AbsoluteX = AbsoluteX;
         enemy.x = groundArr[groundArrayIndex2(AbsoluteX)].x + (AbsoluteX - groundArr[groundArrayIndex2(AbsoluteX)].AbsoluteX);
@@ -383,8 +385,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             $('#' + e.element).css('left', e.x + 'px');
         });
-        if (enemyArr.length < minEnemies) {
-            createEnemy(3, groundArr[groundArr.length - 1].AbsoluteX, 0, groundArr[groundArr.length - 1].height, 20, 100, 1);
+        if (enemyArr.length < minEnemies && groundArr[groundArr.length - 1].height != 20) {
+            createEnemy(3, groundArr[groundArr.length - 1].AbsoluteX, 0, groundArr[groundArr.length - 1].height, 60, 50, 1);
         }
     }
 
@@ -494,6 +496,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (character.AbsoluteX == character.AbsoluteLeft + 400 + 20 * playerSpeed) {
                 character.AbsoluteLeft += playerSpeed;
                 updateScore(moveScore);
+                if (Math.floor(character.AbsoluteLeft/2000) > Math.floor((character.AbsoluteLeft - playerSpeed)/2000)) {
+                    minEnemies++;
+                    console.log(minEnemies);
+                    console.log(enemyArr.length);
+                }
             }
         }
         movingTimeout = setTimeout(moveRight, 1000 / frames);
