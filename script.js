@@ -320,8 +320,14 @@ document.addEventListener('DOMContentLoaded', () => {
         playerHealth += change;
         document.getElementById('playerHealth').innerHTML = playerHealth;
         dmgCooldown = true;
+        setInterval(() => {
+            if(dmgCooldown)
+                $('.character').fadeTo(100, 0.3, function() { $(this).fadeTo(100, 1.0); });
+        }, 200);
+        
         setTimeout(() => {
             dmgCooldown = false;
+            $('.character').stop(stopAll).fadeTo(0, 1.0)
         }, 2000);
     }
 
