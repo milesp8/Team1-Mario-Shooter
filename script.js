@@ -319,6 +319,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function updatePlayerHealth(change) {
         playerHealth += change;
         document.getElementById('playerHealth').innerHTML = playerHealth;
+        dmgCooldown = true;
+        setTimeout(() => {
+            dmgCooldown = false;
+        }, 2000);
     }
 
     function updateScore(increase) {
