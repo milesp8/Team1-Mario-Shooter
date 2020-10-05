@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     var score = 0 //Tracks player score
     const moveScore = 1
     const killScore = 5
+    minEnemies = 2;
 
     const projSpeed = 40;
     const tickSpeed = 30;
@@ -369,10 +370,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             nextGroundIndex = groundArrayIndex2(nextEnemyLocation);
             nextGroundHeight = 0;
-            if (nextGroundIndex > -1) {
+            if (nextGroundIndex > -1 && nextGroundIndex < 25) {
                 nextGroundHeight = (groundArr[nextGroundIndex].height);
             }
-            if (e.y == nextGroundHeight) { //CHANGE TO == AFTER GENERATION 
+            if (nextGroundIndex < 25 && e.y == nextGroundHeight) { //CHANGE TO == AFTER GENERATION 
                 e.AbsoluteX += enemySpeed * e.dir; //Handles Movement of enemies
                 e.x += enemySpeed * e.dir;
             }
@@ -382,6 +383,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             $('#' + e.element).css('left', e.x + 'px');
         });
+        if (enemyArr.length < minEnemies) {
+            createEnemy(3, groundArr[groundArr.length - 1].AbsoluteX, 0, groundArr[groundArr.length - 1].height, 20, 100, 1);
+        }
     }
 
     function updateProj() {
