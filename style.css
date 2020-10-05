@@ -45,6 +45,11 @@ h3 {
     bottom: 0px;
 }
 
+.spike {
+    background-image: url(assets/Terrain/spikes.png);
+    background-color: #87CEFA
+}
+
 .proj {
     background-image: url(assets/Player/minibullet.jpg);
     background-color: purple;
