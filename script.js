@@ -358,6 +358,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.dir == 1) {
                 nextEnemyLocation += e.width;
             }
+            else if (e.dir == -1){
+                nextEnemyLocation -= .5 * e.width;
+            }
             nextGroundIndex = groundArrayIndex2(nextEnemyLocation);
             nextGroundHeight = 0;
             if (nextGroundIndex > -1) {
