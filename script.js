@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //console.log(ground.style.bottom);
     setInterval(updateProj, tickSpeed);//Lags the game quite a bit
     setInterval(updateEnemies, tickSpeed);//Lags the game quite a bit
+    setInterval(checkPlayerCollision, tickSpeed);
 
 
     var enemyArr = [];
@@ -407,6 +408,14 @@ document.addEventListener('DOMContentLoaded', () => {
         dif = xPos - groundArr[0].AbsoluteX;
         index = Math.floor(dif / GROUND_WIDTH);
         return index;
+    }
+
+    function checkPlayerCollision(){ //Check if player touches an enemy
+        enemyArr.forEach(e => {
+            if(character.x > e.x && character.x + character.width < e.x + e.width && character.y < e.y + e.height){
+                updatePlayerHealth(-1);
+            }
+        });
     }
 
     function groundArrayIndex(character) {
