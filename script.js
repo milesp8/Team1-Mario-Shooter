@@ -320,9 +320,9 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(() => {
         if(dmgCooldown)
             $('.character').fadeTo(100, 0.3, function() { $(this).fadeTo(100, 1.0); });
-        else{$('.character').stop(stopAll).fadeTo(0, 1.0)}
+        else{$('.character').stop().fadeTo(0, 1.0)}
     }, 200);
-    
+
     function updatePlayerHealth(change) {
         playerHealth += change;
         document.getElementById('playerHealth').innerHTML = playerHealth;
@@ -330,7 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         setTimeout(() => {
             dmgCooldown = false;
-            $('.character').stop(stopAll).fadeTo(0, 1.0)
+            $('.character').stop().fadeTo(0, 1.0)
         }, 2000);
     }
 
