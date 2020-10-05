@@ -38,20 +38,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const BIGHILLDOWN = 5;
     terrainTypes = [FLAT, BIGHILLUP, FLATBIGHILL, SMALLHILL, SPIKES, BIGHILLDOWN];
     
-    //$(".game-container").css(({width: window.innerWidth + 'px'}));
-    //$(".game-container").css(({height: window.innerHeight + 'px'}));
-    var direction = 1  //direction of the character and projectile ( 1 = right, -1 = left)
-    var isMoving = 0 //Tracks if the player is moving or not, 0 if still, 10 if moving
-    var jumpCount = 0
-    var playerHealth = 3;
-    document.getElementById('playerHealth').innerHTML = playerHealth; //initialize playerHealth
+    //Character variables
+    var direction = 1  //Tracks the direction of the character and any new projectiles ( 1 = right, -1 = left)
+    var isMoving = 0 //Tracks if the player is moving or not (0 if still, 10 if moving)
+    var jumpCount = 0 //Tracks if the player is jumping (0 if not jumping, >0 if jumping)
+    var playerHealth = 3; //Tracks player health
+    var score = 0; //Tracks player score
 
     //object arrays;
     var groundArr = [];
     var enemyArr = [];
     var projArr = [[], []];
-    
-    var score = 0 //Tracks player score
+
     minEnemies = 4;
 
     var enemyHealth = 2;
@@ -81,9 +79,8 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(checkPlayerCollision, TICK_SPEED);
     setInterval(checkBulletEnemyCollision, TICK_SPEED);
 
+    document.getElementById('playerHealth').innerHTML = playerHealth; //initialize playerHealth
 
-    var enemyArr = [];
-    var projArr = [];
     var controller = new Object();
 
     var character = new Object();
@@ -473,6 +470,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //Character jump motion
     gravity();
     function jump() {
+        console.log(jumpCount);
         let maxGroundHeight = Math.max(groundArr[groundArrayIndex(character)].height, groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1)].height);
         character.y += 12 - character.acceleration;
         jumpCount++;
