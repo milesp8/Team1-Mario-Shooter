@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const playerSpeed = 10;
     const ShootingTick = 300;
     const enemySpeed = 10;
-    const enemyHealth = 2;
+    var enemyHealth = 2;
 
     const spikeHealth = -1
     const spikeHeight = 30
@@ -409,7 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 e.x += (projSpeed + isMoving) * e.dir;
                 $('#' + e.element).css('left', e.x + 'px');
-                if (e.x > window.innerWidth || e.x <= 0) {
+                if (e.x > groundArr[groundArr.length - 1].x + GROUND_WIDTH || e.x <= character.AbsoluteLeft - e.width) {
                     $("#" + e.element).parent().remove();
                     projArr = projArr.filter(item => item.element !== e.element)
                 }
