@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const SPIKES = 4;
     const BIGHILLDOWN = 5;
     terrainTypes = [FLAT, BIGHILLUP, FLATBIGHILL, SMALLHILL, SPIKES, BIGHILLDOWN];
-    
+
     //Character variables
     var direction = 1  //Tracks the direction of the character and any new projectiles ( 1 = right, -1 = left)
     var isMoving = 0 //Tracks if the player is moving or not (0 if still, 10 if moving)
@@ -66,7 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
     currentTerrainCounter = 0;
     currentTerrainType = FLAT;
 
-    
 
 
     initialize();
@@ -91,16 +90,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         //Set up the character to flicker when damaged.
         setInterval(() => {
-            if(dmgCooldown)
-                $('.character').fadeTo(100, 0.3, function() { $(this).fadeTo(100, 1.0); });
-            else{$('.character').stop().fadeTo(0, 1.0)}
+            if (dmgCooldown)
+                $('.character').fadeTo(100, 0.3, function () { $(this).fadeTo(100, 1.0); });
+            else { $('.character').stop().fadeTo(0, 1.0) }
         }, 200);
 
         //Initialize player health display
         document.getElementById('playerHealth').innerHTML = playerHealth;
 
         //Create inital ground
-        createGround(0, 0, GROUND_WIDTH, LOW);
+        createGroundAuto(GROUND_WIDTH);
         updateGroundArr();
 
         //First call of gravity to calibrate character to ground level.
@@ -167,6 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
     function gravity() {
         let maxGroundHeight = Math.max(groundArr[groundArrayIndex(character)].height, groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1)].height);
         if (character.y > maxGroundHeight && jumpCount == 0) {
@@ -180,6 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
         $(".character").css(({ bottom: character.y + 'px' }))
         setTimeout(gravity, 1000 / FRAMES);
     }
+
     function createEnemy(health, AbsoluteX, x, y, width, height, dir) {
         var enemy = new Object();
         enemy.element = "enemy" + enemyCounter;
@@ -196,6 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
         enemyArr.push(enemy)
         return enemy;
     }
+
     function createProjectile(x, y) {
         var proj = new Object();
         proj.element = "proj" + Math.floor(Math.random() * 100000);
@@ -214,93 +216,133 @@ document.addEventListener('DOMContentLoaded', () => {
         return proj;
     }
 
-    function createGround(x, y, width, height) {
-        var ground = new Object();
-        ground.element = "ground" + Math.floor(Math.random() * 100000);
-        ground.x = x;
-        ground.y = y;
-        ground.AbsoluteX = x;
-        ground.height = height;
-        ground.width = width;
-        $("ul.groundList").append('<li><div class=ground id=' + ground.element + '></div></li>')
-        $('#' + ground.element).css(({ bottom: y, left: x, width: width + 'px', height: height + 'px' }));
-        groundArr.push(ground)
-        return ground;
-    }
-
     function createGroundAuto(width) {
-        var ground = new Object();
-        ground.element = "ground" + Math.floor(Math.random() * 100000);
-        ground.x = groundArr[groundArr.length - 1].x + GROUND_WIDTH;
-        ground.AbsoluteX = groundArr[groundArr.length - 1].AbsoluteX + 100;
-        ground.y = 0;
-        ground.width = width;
-        switch (currentTerrainType) {
-            case FLAT:
-                if (currentTerrainCounter < 3) {
-                    currentTerrainCounter++;
-                    ground.height = LOW;
-                } else {
-                    currentTerrainType = terrainTypes[Math.floor(Math.random() * (terrainTypes.length - 1))];
-                    currentTerrainCounter = 1;
-                    switch (currentTerrainType) {
-                        case FLAT:
-                            ground.height = LOW;
-                            break;
-                        case BIGHILLUP:
-                            ground.height = MEDIUM;
-                            break;
-                        case FLATBIGHILL:
-                            ground.height = HIGH;
-                            break;
-                        case SMALLHILL:
-                            ground.height = MEDIUM;
-                            break;
-                        case SPIKES:
-                            ground.height = PIT;
-                            break;
-                        default:
-                            console.log("SOMETHING IS WRONG");
+        if (groundArr.length == 0) {
+            var ground = new Object();
+            ground.element = "ground" + Math.floor(Math.random() * 100000);
+            ground.x = 0;
+            ground.AbsoluteX = 0;
+            ground.y = 0;
+            ground.width = width;
+            ground.height = LOW;
+            $("ul.groundList").append('<li><div class=ground id=' + ground.element + '></div></li>')
+            $('#' + ground.element).css(({ bottom: ground.y, left: ground.x, width: width + 'px', height: ground.height + 'px' }));
+            groundArr.push(ground)
+            return ground;
+        } else {
+            var ground = new Object();
+            ground.element = "ground" + Math.floor(Math.random() * 100000);
+            ground.x = groundArr[groundArr.length - 1].x + GROUND_WIDTH;
+            ground.AbsoluteX = groundArr[groundArr.length - 1].AbsoluteX + 100;
+            ground.y = 0;
+            ground.width = width;
+            switch (currentTerrainType) {
+                case FLAT:
+                    if (currentTerrainCounter < 3) {
+                        currentTerrainCounter++;
+                        ground.height = LOW;
+                    } else {
+                        currentTerrainType = terrainTypes[Math.floor(Math.random() * (terrainTypes.length - 1))];
+                        currentTerrainCounter = 1;
+                        switch (currentTerrainType) {
+                            case FLAT:
+                                ground.height = LOW;
+                                break;
+                            case BIGHILLUP:
+                                ground.height = MEDIUM;
+                                break;
+                            case FLATBIGHILL:
+                                ground.height = HIGH;
+                                break;
+                            case SMALLHILL:
+                                ground.height = MEDIUM;
+                                break;
+                            case SPIKES:
+                                ground.height = PIT;
+                                break;
+                            default:
+                                console.log("SOMETHING IS WRONG");
+                        }
                     }
-                }
-                break;
-            case BIGHILLUP:
-                if (currentTerrainCounter < 3) {
-                    goUp = Math.floor(Math.random() * 2);
-                    if (goUp == 1) {
+                    break;
+                case BIGHILLUP:
+                    if (currentTerrainCounter < 3) {
+                        goUp = Math.floor(Math.random() * 2);
+                        if (goUp == 1) {
+                            ground.height = HIGH;
+                            currentTerrainCounter = 1;
+                            currentTerrainType = BIGHILLDOWN;
+                        } else {
+                            ground.height = MEDIUM;
+                            currentTerrainCounter++;
+                        }
+                    } else {
                         ground.height = HIGH;
                         currentTerrainCounter = 1;
                         currentTerrainType = BIGHILLDOWN;
-                    } else {
-                        ground.height = MEDIUM;
-                        currentTerrainCounter++;
                     }
-                } else {
-                    ground.height = HIGH;
-                    currentTerrainCounter = 1;
-                    currentTerrainType = BIGHILLDOWN;
-                }
-                break;
-            case BIGHILLDOWN:
-                if (groundArr[groundArr.length - 1].height == HIGH) {
+                    break;
+                case BIGHILLDOWN:
+                    if (groundArr[groundArr.length - 1].height == HIGH) {
+                        if (currentTerrainCounter < 3) {
+                            ground.height = HIGH;
+                            currentTerrainCounter++;
+                        } else if (currentTerrainCounter < 5) {
+                            goDown = Math.floor(Math.random() * 2);
+                            if (goDown == 1) {
+                                ground.height = MEDIUM;
+                                currentTerrainCounter = 1;
+                            } else {
+                                ground.height = HIGH;
+                                currentTerrainCounter++;
+                            }
+                        } else {
+                            ground.height = MEDIUM;
+                            currentTerrainCounter = 1;
+                        }
+                    } else {
+                        if (currentTerrainCounter < 3) {
+                            goDown = Math.floor(Math.random() * 2);
+                            if (goDown == 1) {
+                                ground.height = LOW;
+                                currentTerrainCounter = 1;
+                                currentTerrainType = FLAT;
+                            } else {
+                                ground.height = MEDIUM;
+                                currentTerrainCounter++;
+                            }
+                        } else {
+                            ground.height = LOW;
+                            currentTerrainCounter = 1;
+                            currentTerrainType = FLAT;
+                        }
+                    }
+                    break;
+                case FLATBIGHILL:
                     if (currentTerrainCounter < 3) {
                         ground.height = HIGH;
                         currentTerrainCounter++;
                     } else if (currentTerrainCounter < 5) {
                         goDown = Math.floor(Math.random() * 2);
                         if (goDown == 1) {
-                            ground.height = MEDIUM;
+                            ground.height = LOW;
                             currentTerrainCounter = 1;
+                            currentTerrainType = FLAT;
                         } else {
                             ground.height = HIGH;
                             currentTerrainCounter++;
                         }
                     } else {
-                        ground.height = MEDIUM;
+                        ground.height = LOW;
                         currentTerrainCounter = 1;
+                        currentTerrainType = FLAT;
                     }
-                } else {
+                    break;
+                case SMALLHILL:
                     if (currentTerrainCounter < 3) {
+                        ground.height = MEDIUM;
+                        currentTerrainCounter++;
+                    } else if (currentTerrainCounter < 5) {
                         goDown = Math.floor(Math.random() * 2);
                         if (goDown == 1) {
                             ground.height = LOW;
@@ -315,80 +357,40 @@ document.addEventListener('DOMContentLoaded', () => {
                         currentTerrainCounter = 1;
                         currentTerrainType = FLAT;
                     }
-                }
-                break;
-            case FLATBIGHILL:
-                if (currentTerrainCounter < 3) {
-                    ground.height = HIGH;
-                    currentTerrainCounter++;
-                } else if (currentTerrainCounter < 5) {
-                    goDown = Math.floor(Math.random() * 2);
-                    if (goDown == 1) {
+                    break;
+                case SPIKES:
+                    let spikeName = createEnemy(SPIKE_HEALTH, ground.AbsoluteX - GROUND_WIDTH - 20, 0, PIT, GROUND_WIDTH + 40, SPIKE_HEIGHT, 0).element;
+                    $('#' + spikeName).addClass("spike");
+                    if (currentTerrainCounter < 2) {
+                        goUp = Math.floor(Math.random() * 2);
+                        if (goUp == 1) {
+                            ground.height = LOW;
+                            currentTerrainCounter = 1;
+                            currentTerrainType = FLAT;
+                        } else {
+                            ground.height = PIT;
+                            currentTerrainCounter++;
+                        }
+                    } else {
                         ground.height = LOW;
                         currentTerrainCounter = 1;
                         currentTerrainType = FLAT;
-                    } else {
-                        ground.height = HIGH;
-                        currentTerrainCounter++;
                     }
-                } else {
-                    ground.height = LOW;
-                    currentTerrainCounter = 1;
-                    currentTerrainType = FLAT;
-                }
-                break;
-            case SMALLHILL:
-                if (currentTerrainCounter < 3) {
-                    ground.height = MEDIUM;
-                    currentTerrainCounter++;
-                } else if (currentTerrainCounter < 5) {
-                    goDown = Math.floor(Math.random() * 2);
-                    if (goDown == 1) {
-                        ground.height = LOW;
-                        currentTerrainCounter = 1;
-                        currentTerrainType = FLAT;
-                    } else {
-                        ground.height = MEDIUM;
-                        currentTerrainCounter++;
-                    }
-                } else {
-                    ground.height = LOW;
-                    currentTerrainCounter = 1;
-                    currentTerrainType = FLAT;
-                }
-                break;
-            case SPIKES:
-                let spikeName = createEnemy(SPIKE_HEALTH, ground.AbsoluteX - GROUND_WIDTH - 20, 0, PIT, GROUND_WIDTH + 40, SPIKE_HEIGHT, 0).element;
-                $('#'+spikeName).addClass("spike");
-                if (currentTerrainCounter < 2) {
-                    goUp = Math.floor(Math.random() * 2);
-                    if (goUp == 1) {
-                        ground.height = LOW;
-                        currentTerrainCounter = 1;
-                        currentTerrainType = FLAT;
-                    } else {
-                        ground.height = PIT;
-                        currentTerrainCounter++;
-                    }
-                } else {
-                    ground.height = LOW;
-                    currentTerrainCounter = 1;
-                    currentTerrainType = FLAT;
-                }
-                break;
+                    break;
 
+            }
+            $("ul.groundList").append('<li><div class=ground id=' + ground.element + '></div></li>')
+            $('#' + ground.element).css(({ bottom: ground.y, left: ground.x, width: width + 'px', height: ground.height + 'px' }));
+            groundArr.push(ground)
+            return ground;
         }
-        $("ul.groundList").append('<li><div class=ground id=' + ground.element + '></div></li>')
-        $('#' + ground.element).css(({ bottom: ground.y, left: ground.x, width: width + 'px', height: ground.height + 'px' }));
-        groundArr.push(ground)
-        return ground;
     }
 
     function updatePlayerHealth(change) {
         playerHealth += change;
         document.getElementById('playerHealth').innerHTML = playerHealth;
         dmgCooldown = true;
-        
+
         setTimeout(() => {
             dmgCooldown = false;
             $('.character').stop().fadeTo(0, 1.0)
@@ -403,6 +405,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateCharacter() {
         $('#' + character.element).css('left', character.x + 'px');
     }
+
     function updateGround() {
         groundArr.forEach(e => {
             $('#' + e.element).css('left', e.x + 'px');
@@ -487,18 +490,19 @@ document.addEventListener('DOMContentLoaded', () => {
         return index;
     }
 
-    function checkPlayerCollision(){ //Check if player touches an enemy
+    function checkPlayerCollision() { //Check if player touches an enemy
         enemyArr.forEach(e => {
-            if((((character.x > e.x && character.x < e.x + e.width) || (character.x + character.width > e.x && character.x + character.width < e.x + e.width)) && (character.y < e.y + e.height && character.y >= e.y)) && dmgCooldown == false){
+            if ((((character.x > e.x && character.x < e.x + e.width) || (character.x + character.width > e.x && character.x + character.width < e.x + e.width)) && (character.y < e.y + e.height && character.y >= e.y)) && dmgCooldown == false) {
                 updatePlayerHealth(-1);
             }
         });
     }
-    function checkBulletEnemyCollision(){
+
+    function checkBulletEnemyCollision() {
         projArr.forEach(e => {
             var hasCollided = false;
             enemyArr.forEach(f => {
-                if ((((e.x + e.width >= f.x && e.x + e.width <= f.x + f.width) ||  (e.x > f.x && e.x < f.x + f.width)) && ((e.y >= f.y && e.y <= f.y + f.height) || (e.y + e.height >= f.y && e.y + e.height <= f.y + f.height ))) && hasCollided == false){
+                if ((((e.x + e.width >= f.x && e.x + e.width <= f.x + f.width) || (e.x > f.x && e.x < f.x + f.width)) && ((e.y >= f.y && e.y <= f.y + f.height) || (e.y + e.height >= f.y && e.y + e.height <= f.y + f.height))) && hasCollided == false) {
                     f.health = f.health - 1;
                     hasCollided = true;
                     $("#" + e.element).parent().remove();
@@ -557,10 +561,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (character.AbsoluteX == character.AbsoluteLeft + 400 + 20 * PLAYER_SPEED) {
                 character.AbsoluteLeft += PLAYER_SPEED;
                 updateScore(MOVE_SCORE);
-                if (Math.floor(character.AbsoluteLeft/2000) > Math.floor((character.AbsoluteLeft - PLAYER_SPEED)/2000)) {
+                if (Math.floor(character.AbsoluteLeft / 2000) > Math.floor((character.AbsoluteLeft - PLAYER_SPEED) / 2000)) {
                     minEnemies++;
                 }
-                if (Math.floor(character.AbsoluteLeft/10000) > Math.floor((character.AbsoluteLeft - PLAYER_SPEED)/10000) && enemyHealth < 5) {
+                if (Math.floor(character.AbsoluteLeft / 10000) > Math.floor((character.AbsoluteLeft - PLAYER_SPEED) / 10000) && enemyHealth < 5) {
                     enemyHealth++;
                 }
             }
