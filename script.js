@@ -57,13 +57,17 @@ document.addEventListener('DOMContentLoaded', () => {
     var dmgCooldown = false; //Tracks if there has been damage 
 
     //Variables for use in generating enemies
-    var enemyCounter = 0;
+    var enemyIndexCounter = 0;
     var minEnemies = 4;
     var enemyHealth = 2;
 
     //Variables for use in generating terrain
+    groundIndexCounter = 0;
     currentTerrainCounter = 0;
     currentTerrainType = FLAT;
+
+    //Variables for use in generating projectiles
+    projectileIndexCounter = 0;
 
 
     //Function to start the game
@@ -168,7 +172,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function createGround() { //Create a ground object
         if (groundArr.length == 0) {
             var ground = new Object();
-            ground.element = "ground" + Math.floor(Math.random() * 100000);
+            ground.element = "ground" + groundIndexCounter;
+            groundIndexCounter = (groundIndexCounter + 1) % 100000;            
             ground.x = 0;
             ground.AbsoluteX = 0;
             ground.y = 0;
@@ -337,8 +342,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function createEnemy(health, AbsoluteX, y, width, height, dir) { //Create an enemy object
         var enemy = new Object();
-        enemy.element = "enemy" + enemyCounter;
-        enemyCounter++;
+        enemy.element = "enemy" + enemyIndexCounter;
+        enemyIndexCounter = (enemyIndexCounter + 1) % 100000;
         enemy.health = health;
         enemy.AbsoluteX = AbsoluteX;
         enemy.x = groundArr[groundArrayIndex2(AbsoluteX)].x + (AbsoluteX - groundArr[groundArrayIndex2(AbsoluteX)].AbsoluteX);
@@ -354,7 +359,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function createProjectile(x, y) { //Create a projectile object
         var proj = new Object();
-        proj.element = "proj" + Math.floor(Math.random() * 100000);
+        proj.element = "proj" + projectileIndexCounter;
+        projectileIndexCounter = (projectileIndexCounter + 1) % 100000;
         proj.x = x;
         proj.y = y;
         proj.dir = direction;
