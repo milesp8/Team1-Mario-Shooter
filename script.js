@@ -55,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
     var movingTimeout = -1; //Tracks if the character can move yet
     var shootingTimeout = -1; //Tracks if the character can shoot yet
     var dmgCooldown = false; //Tracks if there has been damage 
+    var endgame = false;
 
     //Variables for use in generating enemies
     var enemyIndexCounter = 0;
@@ -73,10 +74,11 @@ document.addEventListener('DOMContentLoaded', () => {
     //Function to start the game
     function initialize() { //Start the game
         //Set up intervals for how often to update the game.
-        setInterval(updateProj, TICK_SPEED);
-        setInterval(updateEnemies, TICK_SPEED);
-        setInterval(checkPlayerCollision, TICK_SPEED);
-        setInterval(checkBulletEnemyCollision, TICK_SPEED);
+        bulletMoveInterval = setInterval(updateProj, TICK_SPEED);
+        enemyInterval = setInterval(updateEnemies, TICK_SPEED);
+        playerCollisionInterval = setInterval(checkPlayerCollision, TICK_SPEED);
+        bulletCollisionInterval = setInterval(checkBulletEnemyCollision, TICK_SPEED);
+        playerHealthInterval = setInterval(checkHealth, TICK_SPEED);
 
         //Initialize character
         character.element = "character";
@@ -120,52 +122,86 @@ document.addEventListener('DOMContentLoaded', () => {
 
         //Start key listener for keydown
         $(document).keydown(function (e) {
-            switch (e.which) {
-                case LEFT_KEY:  //left key (A)
-                    isMoving = 10;
-                    if (movingTimeout === -1) {
-                        moveLeft();
-                    }
-                    break;
-                case UP_KEY:  //up key (W)
-                    if (character.y <= Math.max(groundArr[groundArrayIndex(character)].height, groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1)].height)) {
-                        jump();
-                    }
-                    break;
-                case RIGHT_KEY:  //right key (D)
-                    isMoving = 10;
-                    if (movingTimeout === -1) {
-                        moveRight();
-                    }
-                    break;
-                case SPACE_KEY:
-                    if (shootingTimeout === -1) {
-                        shoot();
-                    }
-                    break;
-                default: return;
+            if (!endgame){
+                switch (e.which) {
+                    case LEFT_KEY:  //left key (A)
+                        isMoving = 10;
+                        if (movingTimeout === -1) {
+                            moveLeft();
+                        }
+                        break;
+                    case UP_KEY:  //up key (W)
+                        if (character.y <= Math.max(groundArr[groundArrayIndex(character)].height, groundArr[groundArrayIndex2(character.AbsoluteX + character.width - 1)].height)) {
+                            jump();
+                        }
+                        break;
+                    case RIGHT_KEY:  //right key (D)
+                        isMoving = 10;
+                        if (movingTimeout === -1) {
+                            moveRight();
+                        }
+                        break;
+                    case SPACE_KEY:
+                        if (shootingTimeout === -1) {
+                            shoot();
+                        }
+                        break;
+                    default: return;
+                }
+            } else {
+                return false;
             }
         });
         //Start key listener for key up.
         $(document).keyup(function (e) {
-            switch (e.which) {
-                case LEFT_KEY:  //left key
-                    clearTimeout(movingTimeout);
-                    movingTimeout = -1;
-                    isMoving = 0;
-                    break;
-                case RIGHT_KEY:  //right key
-                    clearTimeout(movingTimeout);
-                    movingTimeout = -1;
-                    isMoving = 0;
-                    break;
-                case SPACE_KEY:
-                    clearTimeout(shootingTimeout);
-                    shootingTimeout = -1;
-                    break;
-                default: return;
+            if (!endgame) {
+                switch (e.which) {
+                    case LEFT_KEY:  //left key
+                        clearTimeout(movingTimeout);
+                        movingTimeout = -1;
+                        isMoving = 0;
+                        break;
+                    case RIGHT_KEY:  //right key
+                        clearTimeout(movingTimeout);
+                        movingTimeout = -1;
+                        isMoving = 0;
+                        break;
+                    case SPACE_KEY:
+                        clearTimeout(shootingTimeout);
+                        shootingTimeout = -1;
+                        break;
+                    default: return;
+                }
+            } else {
+                return false;
             }
         });
+    }
+
+    function checkHealth (){
+        if (playerHealth == 0){
+            
+            //clearInterval(enemyInterval);
+            clearInterval(playerCollisionInterval);
+            clearInterval(bulletCollisionInterval);
+            clearInterval(bulletMoveInterval);
+            clearInterval(playerHealthInterval);
+
+            endgame = true;
+
+            $('.endscreen').addClass('fade-in');
+            $('.gameover').addClass('fade-in');
+
+            $('.endscreen').css('opacity', '0.8');
+            $('.gameover').css('opacity', '1');
+
+            $('.finalscore').text('Final score: '+ score);
+
+            $('.restartBtn').click(function(){
+                window.location.reload();
+            });
+        
+        }
     }
 
     //Functions to create objects
