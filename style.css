@@ -114,7 +114,8 @@ h3 {
 }
 
 .enemy {
-    background-color: rgb(83, 0, 94);
+    background-image: url(assets/Enemy/snake.png);
+    background-color: rgb(83, 0, 94, 0);
     height: 30px;
     width: 30px;
     position: absolute;
