@@ -195,6 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
             $('.endscreen').css('opacity', '0.8');
             $('.gameover').css('opacity', '1');
 
+            $('#score').text('Score: '+ score);
             $('.finalscore').text('Final score: '+ score);
 
             $('.restartBtn').click(function(){
