@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const SPIKE_HEALTH = -1;
 
     const MOVE_SCORE = 1;
-    const KILL_SCORE = 5;
+    const KILL_SCORE = 100;
 
     const PLAYER_SPEED = 10;
     const ENEMY_SPEED = 10;
