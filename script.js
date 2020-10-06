@@ -178,33 +178,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function checkHealth (){
-        if (playerHealth == 0){
-            
-            //clearInterval(enemyInterval);
-            clearInterval(playerCollisionInterval);
-            clearInterval(bulletCollisionInterval);
-            clearInterval(bulletMoveInterval);
-            clearInterval(playerHealthInterval);
-
-            endgame = true;
-
-            $('.endscreen').addClass('fade-in');
-            $('.gameover').addClass('fade-in');
-
-            $('.endscreen').css('opacity', '0.8');
-            $('.gameover').css('opacity', '1');
-
-            $('#score').text('Score: '+ score);
-            $('.finalscore').text('Final score: '+ score);
-
-            $('.restartBtn').click(function(){
-                window.location.reload();
-            });
-        
-        }
-    }
-
     //Functions to create objects
     function createGround() { //Create a ground object
         if (groundArr.length == 0) {
@@ -505,6 +478,32 @@ document.addEventListener('DOMContentLoaded', () => {
             dmgCooldown = false;
             $('.character').stop().fadeTo(0, 1.0)
         }, 2000);
+    }
+
+    function checkHealth (){ //Check the player's health to see if it's time to end the game
+        if (playerHealth == 0){
+            
+            clearInterval(playerCollisionInterval);
+            clearInterval(bulletCollisionInterval);
+            clearInterval(bulletMoveInterval);
+            clearInterval(playerHealthInterval);
+
+            endgame = true;
+
+            $('.endscreen').addClass('fade-in');
+            $('.gameover').addClass('fade-in');
+
+            $('.endscreen').css('opacity', '0.8');
+            $('.gameover').css('opacity', '1');
+
+            $('#score').text('Score: '+ score);
+            $('.finalscore').text('Final score: '+ score);
+
+            $('.restartBtn').click(function(){
+                window.location.reload();
+            });
+        
+        }
     }
 
     function updateScore(increase) { //Update the player's score
