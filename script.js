@@ -623,7 +623,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function shoot() { //Handle the character shooting
         let laserID
         let currLaserID = 0;
-        createProjectile(character.x + character.width / 3, character.y + 20);
+        createProjectile(character.x + ((character.width / 3) * direction), character.y + 20);
         shootingTimeout = setTimeout(shoot, SHOOTING_DELAY);
     }
 
