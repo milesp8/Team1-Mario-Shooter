@@ -123,7 +123,7 @@ h3 {
 
 .spike {
     background-image: url(assets/Terrain/spikes.png);
-    background-color: rgb(255, 194, 59);
+    background-color: rgb(0, 0, 0, 0);
 }
 
 .proj {
